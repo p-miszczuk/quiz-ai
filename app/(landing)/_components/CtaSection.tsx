@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/shadcn/button";
 import SectionTitle from "@/components/ui/section-title";
 
 export default function CtaSection() {

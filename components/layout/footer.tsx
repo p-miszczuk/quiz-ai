@@ -1,4 +1,4 @@
-import { Separator } from "../ui/separator";
+import { Separator } from "../ui/shadcn/separator";
 
 export default function Footer() {
   return (

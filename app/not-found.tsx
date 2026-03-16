@@ -1,11 +1,15 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/shadcn/button";
 import { AlertCircle } from "lucide-react";
 
-export default function Error() {
+export default function NotFound() {
   const router = useRouter();
+
+  const handleGoHome = () => {
+    router.push("/");
+  };
 
   return (
     <div className="flex flex-col h-screen justify-center items-center bg-gray-50 w-full">
@@ -17,7 +21,7 @@ export default function Error() {
           <br />
           You can return to the homepage.
         </p>
-        <Button onClick={() => router.push("/")} size="lg">
+        <Button onClick={handleGoHome} size="lg">
           Go Home
         </Button>
       </div>

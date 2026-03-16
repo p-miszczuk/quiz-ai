@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 // import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/components/ui/shadcn/separator";
 import Footer from "@/components/layout/footer";
 import Header from "@/components/layout/header";
 
@@ -22,14 +22,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <html lang="en">
       <body className="md:container md:mx-auto px-4">
         <div className="flex flex-col items-center min-h-screen">
           {children}
+          {modal}
         </div>
       </body>
     </html>
