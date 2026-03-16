@@ -1,5 +1,5 @@
-import SectionTitle from "../ui/section-title";
-import { steps } from "./const";
+import SectionTitle from "@/components/ui/section-title";
+import { steps } from "@/app/(landing)/_components/const";
 
 type Step = (typeof steps)[number];
 

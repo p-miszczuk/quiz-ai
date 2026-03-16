@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import SectionTitle from "../ui/section-title";
+import SectionTitle from "@/components/ui/section-title";
 
 export default function CtaSection() {
   return (

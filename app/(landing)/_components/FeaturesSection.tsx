@@ -1,5 +1,5 @@
-import SectionTitle from "../ui/section-title";
-import { features } from "./const";
+import SectionTitle from "@/components/ui/section-title";
+import { features } from "@/app/(landing)/_components/const";
 
 type Feature = (typeof features)[number];
 
