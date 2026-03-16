@@ -10,7 +10,7 @@ import {
 
 export default function LoginForm() {
   return (
-    <Card className="w-full">
+    <Card className="w-full shadow-lg">
       <CardHeader>
         <CardTitle className="text-2xl font-bold text-center">
           Welcome
