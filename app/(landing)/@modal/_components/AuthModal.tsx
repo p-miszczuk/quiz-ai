@@ -1,10 +1,9 @@
 "use client";
 
-import LoginForm from "@/components/auth/login-form";
 import { XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export default function AuthModal() {
+export default function AuthModal({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   const handleClose = () => {
@@ -20,7 +19,7 @@ export default function AuthModal() {
           role="button"
           onClick={handleClose}
         />
-        <LoginForm />
+        {children}
       </div>
     </div>
   );
