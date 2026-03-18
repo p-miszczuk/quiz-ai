@@ -1,4 +1,4 @@
-import RegisterForm from "@/components/auth/register-form";
+import RegisterForm from "@/components/auth/RegisterForm";
 import AuthModal from "../_components/AuthModal";
 
 export default function RegisterModalPage() {

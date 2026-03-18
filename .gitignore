@@ -10,6 +10,7 @@
 !.yarn/releases
 !.yarn/versions
 .env
+structure.md
 
 # testing
 /coverage
@@ -43,3 +44,5 @@ next-env.d.ts
 
 # cursor
 .cursor/
+
+
