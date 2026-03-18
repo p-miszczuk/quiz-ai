@@ -22,7 +22,7 @@ export default function LoginForm({ isModal = false }: { isModal?: boolean }) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4" data-testid="login-form">
           <InputField
             id="email"
             type="email"
