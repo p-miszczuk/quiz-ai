@@ -16,7 +16,11 @@ const errorResponse = <E extends { errorMessage: string }>(
 };
 
 export const createUser = async (data: RegisterInputs) => {
-  const { email, password, name } = data;
+  const { email, password, name } = data || {};
+
+  if (!email || !password || !name) {
+    return errorResponse({ errorMessage: "All fields are required" });
+  }
 
   try {
     return successResponse(
