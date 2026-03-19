@@ -48,12 +48,14 @@ export default function Register({ isModal = false }: { isModal?: boolean }) {
           <form
             className="flex flex-col gap-4"
             onSubmit={handleSubmit(onSubmit)}
+            data-testid="register-form"
           >
             <InputField
               id="email"
               type="email"
               placeholder="Enter your email"
               label="Email"
+              data-testid="email-input"
               errorMessage={errors?.email?.message}
               {...formRegister("email")}
             />
@@ -62,6 +64,7 @@ export default function Register({ isModal = false }: { isModal?: boolean }) {
               type="password"
               placeholder="Enter your password"
               label="Password"
+              data-testid="password-input"
               errorMessage={errors?.password?.message}
               {...formRegister("password")}
             />
@@ -70,6 +73,7 @@ export default function Register({ isModal = false }: { isModal?: boolean }) {
               type="password"
               placeholder="Confirm your password"
               label="Confirm Password"
+              data-testid="confirm-password-input"
               errorMessage={errors?.confirmPassword?.message}
               {...formRegister("confirmPassword")}
             />
@@ -78,6 +82,7 @@ export default function Register({ isModal = false }: { isModal?: boolean }) {
               type="text"
               placeholder="Enter your name"
               label="Name"
+              data-testid="name-input"
               errorMessage={errors?.name?.message}
               {...formRegister("name")}
             />
