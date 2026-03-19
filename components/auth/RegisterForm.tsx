@@ -1,6 +1,6 @@
 "use client";
 
-import { InputField } from "@/components/ui/fields/input-field";
+import { InputField } from "@/components/ui/fields/InputField";
 import {
   Card,
   CardContent,

@@ -28,10 +28,27 @@ export function InputField({
 }: InputReadOnlyProps<InputFieldProps>) {
   return (
     <Field>
-      <FieldLabel htmlFor={id}>{label}</FieldLabel>
-      <Input id={id} type={type} placeholder={placeholder} {...props} />
-      {description && <FieldDescription>{description}</FieldDescription>}
-      {errorMessage && <FieldError errors={[{ message: errorMessage }]} />}
+      <FieldLabel htmlFor={id} data-testid={`${id}-label`}>
+        {label}
+      </FieldLabel>
+      <Input
+        id={id}
+        type={type}
+        placeholder={placeholder}
+        {...props}
+        data-testid={`${id}-input`}
+      />
+      {description && (
+        <FieldDescription data-testid={`${id}-description`}>
+          {description}
+        </FieldDescription>
+      )}
+      {errorMessage && (
+        <FieldError
+          errors={[{ message: errorMessage }]}
+          data-testid={`${id}-error`}
+        />
+      )}
     </Field>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { InputField } from "../ui/fields/input-field";
+import { InputField } from "../ui/fields/InputField";
 import { Button } from "../ui/shadcn/button";
 import {
   Card,
