@@ -1,7 +1,6 @@
 "use client";
 
 import { Button, buttonVariants } from "@/components/ui/shadcn/button";
-import { Link } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function Navigation() {
@@ -25,6 +24,7 @@ export default function Navigation() {
           className:
             "text-white font-medium hover:text-gray-300 cursor-pointer hover:no-underline ",
         })}
+        data-testid="nav-login-button"
       >
         Login
       </Button>
@@ -36,6 +36,7 @@ export default function Navigation() {
           className:
             "text-white font-medium hover:text-gray-300 cursor-pointer hover:no-underline",
         })}
+        data-testid="nav-register-button"
       >
         Register
       </Button>
