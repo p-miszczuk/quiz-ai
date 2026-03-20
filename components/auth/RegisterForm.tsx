@@ -13,9 +13,9 @@ import { Button } from "@/components/ui/shadcn/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterInputs, registerSchema } from "@/validators/auth";
-import { register } from "@/actions/auth/register";
 import { FieldError } from "@/components/ui/shadcn/field";
 import RedirectForm from "./components/RedirectForm";
+import { register } from "@/actions/auth/register";
 
 export default function Register({ isModal = false }: { isModal?: boolean }) {
   const {
@@ -28,8 +28,15 @@ export default function Register({ isModal = false }: { isModal?: boolean }) {
   const onSubmit = async (data: RegisterInputs) => {
     const { error } = await register(data);
 
-    if (error && "errorMessage" in error) {
-      setError("root", { message: error.errorMessage });
+    if (error) {
+      const message =
+        "errorMessage" in error
+          ? error.errorMessage
+          : (error.errors[0] ?? "Registration failed");
+
+      setError("root", {
+        message,
+      });
     }
   };
 

@@ -1,10 +1,12 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
-import { register } from "@/actions/auth/register";
 import { REGISTER_ERRORS } from "@/validators/auth";
+import { register } from "@/actions/auth/register";
 import RegisterForm from "../RegisterForm";
 
+const mockPush = jest.fn();
 jest.mock("next/navigation", () => ({
   useRouter: () => ({
+    push: mockPush,
     replace: jest.fn(),
   }),
 }));
@@ -140,13 +142,13 @@ describe("RegisterForm", () => {
 
   it("should display error message if the email is already in use", async () => {
     const errorMessage = "User already exists. Use another email.";
+    jest.mocked(register).mockResolvedValueOnce({
+      error: { errorMessage },
+    } as never);
+
     render(<RegisterForm isModal={false} />);
     const registerForm = screen.getByTestId("register-form");
     await fillInputs({});
-
-    (register as jest.Mock).mockResolvedValueOnce({
-      error: { errorMessage },
-    });
 
     await act(async () => {
       fireEvent.submit(registerForm);

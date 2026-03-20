@@ -1,6 +1,10 @@
 import { auth } from "@/lib/auth";
 import { createUser } from "../auth";
 
+jest.mock("next/headers", () => ({
+  headers: jest.fn().mockResolvedValue(new Headers()),
+}));
+
 jest.mock("@/lib/auth", () => ({
   auth: {
     api: {

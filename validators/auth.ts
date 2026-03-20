@@ -10,6 +10,11 @@ export const REGISTER_ERRORS = {
   matchPasswords: "Passwords do not match",
 } as const satisfies Record<string, string>;
 
+export const LOGIN_ERRORS = {
+  email: "Invalid email address",
+  password: "Password must be at least 8 characters",
+} as const satisfies Record<string, string>;
+
 const emailPattern =
   /^(?!\.)(?!.*\.\.)([a-z0-9_'+\-\.]*)[a-z0-9_+-]@([a-z0-9][a-z0-9\-]*\.)+[a-z]{2,}$/i;
 
@@ -36,15 +41,18 @@ export const registerSchema = z.object({
   name: z.string().min(1, { message: REGISTER_ERRORS.name }),
 });
 
+export const loginSchema = z.object({
+  email: z.email({
+    pattern: emailPattern,
+    message: LOGIN_ERRORS.email,
+  }),
+  password: z.string().min(8, { message: LOGIN_ERRORS.password }),
+});
+
 export type RegisterInputs = z.infer<typeof registerSchema>;
+
+export type LoginInputs = z.infer<typeof loginSchema>;
 
 export const setTreeifyError = (error: z.ZodError) => {
   return z.treeifyError(error);
 };
-
-export const loginSchema = z.object({
-  email: z.email({
-    pattern: emailPattern,
-  }),
-  password: z.string().min(8),
-});

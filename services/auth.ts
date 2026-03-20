@@ -1,7 +1,10 @@
 "use server";
 
 import { auth } from "@/lib/auth";
-import { RegisterInputs } from "@/validators/auth";
+import { LoginInputs, RegisterInputs } from "@/validators/auth";
+import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 type Result<S, E extends { errorMessage: string }> =
   | { data: S; error: null }
@@ -27,6 +30,7 @@ export const createUser = async (data: RegisterInputs) => {
   try {
     return successResponse(
       await auth.api.signUpEmail({
+        headers: (await headers()) as HeadersInit,
         body: {
           email,
           password,
@@ -34,6 +38,46 @@ export const createUser = async (data: RegisterInputs) => {
         },
       }),
     );
+  } catch (error: unknown) {
+    if (typeof error === "object" && error !== null && "message" in error) {
+      return errorResponse({ errorMessage: error.message as string });
+    }
+
+    return errorResponse({ errorMessage: "Unknown error" });
+  }
+};
+
+export const signIn = async (data: LoginInputs) => {
+  const { email, password } = data || {};
+
+  if (!email || !password) {
+    return errorResponse({ errorMessage: "All fields are required" });
+  }
+
+  try {
+    return successResponse(
+      await auth.api.signInEmail({
+        headers: (await headers()) as HeadersInit,
+        body: {
+          email,
+          password,
+        },
+      }),
+    );
+  } catch (error: unknown) {
+    if (typeof error === "object" && error !== null && "message" in error) {
+      return errorResponse({ errorMessage: error.message as string });
+    }
+
+    return errorResponse({ errorMessage: "Unknown error" });
+  }
+};
+
+export const signOut = async () => {
+  try {
+    await auth.api.signOut({
+      headers: (await headers()) as HeadersInit,
+    });
   } catch (error: unknown) {
     if (typeof error === "object" && error !== null && "message" in error) {
       return errorResponse({ errorMessage: error.message as string });
