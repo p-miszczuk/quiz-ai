@@ -2,9 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { LoginInputs, RegisterInputs } from "@/validators/auth";
-import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 
 type Result<S, E extends { errorMessage: string }> =
   | { data: S; error: null }
