@@ -19,14 +19,18 @@ export default function Dropdown() {
   const handleLogout = async () => {
     const result = await signOut();
     if (result && !result.error) {
-      router.push("/login");
+      router.push("/");
     }
   };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Settings className="w-6 h-6 cursor-pointer hover:text-gray-700" />
+        <Settings
+          className="w-6 h-6 cursor-pointer hover:text-gray-700"
+          data-testid="settings-button"
+          role="button"
+        />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem
