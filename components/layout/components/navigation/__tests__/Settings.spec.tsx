@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import Dropdown from "../Dropdown";
+import Dropdown from "../Settings";
 
 const mockPush = jest.fn();
 jest.mock("next/navigation", () => ({

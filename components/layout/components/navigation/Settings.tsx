@@ -7,10 +7,10 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/shadcn/dropdown-menu";
 import { signOut } from "@/services/auth";
-import { Settings } from "lucide-react";
+import { SettingsIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export default function Dropdown() {
+export default function Settings() {
   const router = useRouter();
   const handleSettings = () => {
     router.push("/settings");
@@ -26,7 +26,7 @@ export default function Dropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Settings
+        <SettingsIcon
           className="w-6 h-6 cursor-pointer hover:text-gray-700"
           data-testid="settings-button"
           role="button"
@@ -34,12 +34,14 @@ export default function Dropdown() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem
+          role="button"
           onClick={handleSettings}
           className="cursor-pointer hover:bg-transparent hover:text-primary font-medium justify-center py-3"
         >
           Settings
         </DropdownMenuItem>
         <DropdownMenuItem
+          role="button"
           onClick={handleLogout}
           className="cursor-pointer hover:bg-transparent hover:text-primary font-medium justify-center py-3"
         >
