@@ -7,6 +7,7 @@ export default function AuthModal({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   const handleClose = () => {
+    // Close the modal and go back, so the modal unmounts
     router.back();
   };
 

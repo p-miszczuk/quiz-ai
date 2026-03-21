@@ -1,5 +1,5 @@
 import Link from "next/link";
-import NavigationWrapper from "./components/NavigationWrapper";
+import NavigationWrapper from "./components/navigation/NavigationWrapper";
 
 export default function Header() {
   return (
