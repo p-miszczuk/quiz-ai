@@ -44,17 +44,16 @@ export const getCurrentUser = cache(async () => {
     headers: (await headers()) as HeadersInit,
   });
 
-  let currentUser: User | null = null;
-  if (session?.user) {
-    currentUser = {
-      id: session.user.id as UserId,
-      email: session.user.email,
-      name: session.user.name,
-      emailVerified: session.user.emailVerified,
-      createdAt: session.user.createdAt,
-      updatedAt: session.user.updatedAt,
-    };
-  }
+  if (!session?.user) return null;
+
+  const currentUser: User = {
+    id: session.user.id as UserId,
+    email: session.user.email,
+    name: session.user.name,
+    emailVerified: session.user.emailVerified,
+    createdAt: session.user.createdAt,
+    updatedAt: session.user.updatedAt,
+  };
 
   return currentUser;
 });

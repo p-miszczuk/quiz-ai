@@ -1,28 +1,18 @@
 "use server";
 
 import { auth } from "@/lib/auth";
+import { errorResponse, successResponse } from "@/lib/dal/types";
 import { LoginInputs, RegisterInputs } from "@/validators/auth";
 import { headers } from "next/headers";
-
-type Result<S, E extends { errorMessage: string }> =
-  | { data: S; error: null }
-  | { data: null; error: E };
-
-const successResponse = <S>(data: S): Result<S, never> => {
-  return { data, error: null };
-};
-
-const errorResponse = <E extends { errorMessage: string }>(
-  error: E,
-): Result<null, E> => {
-  return { data: null, error };
-};
 
 export const createUser = async (data: RegisterInputs) => {
   const { email, password, name } = data || {};
 
   if (!email || !password || !name) {
-    return errorResponse({ errorMessage: "All fields are required" });
+    return errorResponse({
+      type: "validation-error",
+      error: "All fields are required",
+    });
   }
 
   try {
@@ -38,10 +28,16 @@ export const createUser = async (data: RegisterInputs) => {
     );
   } catch (error: unknown) {
     if (typeof error === "object" && error !== null && "message" in error) {
-      return errorResponse({ errorMessage: error.message as string });
+      return errorResponse({
+        type: "better-auth-error",
+        error: error.message as string,
+      });
     }
 
-    return errorResponse({ errorMessage: "Unknown error" });
+    return errorResponse({
+      type: "unknown-error",
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 };
 
@@ -49,7 +45,10 @@ export const signIn = async (data: LoginInputs) => {
   const { email, password } = data || {};
 
   if (!email || !password) {
-    return errorResponse({ errorMessage: "All fields are required" });
+    return errorResponse({
+      type: "validation-error",
+      error: "All fields are required",
+    });
   }
 
   try {
@@ -64,23 +63,37 @@ export const signIn = async (data: LoginInputs) => {
     );
   } catch (error: unknown) {
     if (typeof error === "object" && error !== null && "message" in error) {
-      return errorResponse({ errorMessage: error.message as string });
+      return errorResponse({
+        type: "better-auth-error",
+        error: error.message as string,
+      });
     }
 
-    return errorResponse({ errorMessage: "Unknown error" });
+    return errorResponse({
+      type: "unknown-error",
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 };
 
 export const signOut = async () => {
   try {
-    await auth.api.signOut({
-      headers: (await headers()) as HeadersInit,
-    });
+    return successResponse(
+      await auth.api.signOut({
+        headers: (await headers()) as HeadersInit,
+      }),
+    );
   } catch (error: unknown) {
     if (typeof error === "object" && error !== null && "message" in error) {
-      return errorResponse({ errorMessage: error.message as string });
+      return errorResponse({
+        type: "better-auth-error",
+        error: error.message as string,
+      });
     }
 
-    return errorResponse({ errorMessage: "Unknown error" });
+    return errorResponse({
+      type: "unknown-error",
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 };

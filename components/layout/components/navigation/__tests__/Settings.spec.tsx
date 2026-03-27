@@ -9,7 +9,7 @@ jest.mock("next/navigation", () => ({
 }));
 
 jest.mock("@/services/auth", () => ({
-  signOut: jest.fn().mockResolvedValue({ error: false }),
+  signOut: jest.fn().mockResolvedValue({ success: true }),
 }));
 
 describe("Dropdown", () => {

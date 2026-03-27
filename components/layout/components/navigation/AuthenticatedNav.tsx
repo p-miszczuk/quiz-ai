@@ -1,11 +1,11 @@
-import Dropdown from "./Settings";
-import Menu from "./Menu";
+import Settings from "./Settings";
+import HamburgerMenu from "./HamburgerMenu";
 
 export default function AuthenticatedNav() {
   return (
     <div className="flex items-center gap-2">
-      <Menu />
-      <Dropdown />
+      <HamburgerMenu />
+      <Settings />
     </div>
   );
 }

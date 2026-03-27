@@ -12,7 +12,7 @@ export const REGISTER_ERRORS = {
 
 export const LOGIN_ERRORS = {
   email: "Invalid email address",
-  password: "Password must be at least 8 characters",
+  password: "Password is required",
 } as const satisfies Record<string, string>;
 
 const emailPattern =
@@ -46,7 +46,7 @@ export const loginSchema = z.object({
     pattern: emailPattern,
     message: LOGIN_ERRORS.email,
   }),
-  password: z.string().min(8, { message: LOGIN_ERRORS.password }),
+  password: z.string().min(1, { message: LOGIN_ERRORS.password }),
 });
 
 export type RegisterInputs = z.infer<typeof registerSchema>;

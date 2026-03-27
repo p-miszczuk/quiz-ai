@@ -143,7 +143,7 @@ describe("RegisterForm", () => {
   it("should display error message if the email is already in use", async () => {
     const errorMessage = "User already exists. Use another email.";
     jest.mocked(register).mockResolvedValueOnce({
-      error: { errorMessage },
+      error: errorMessage,
     } as never);
 
     render(<RegisterForm isModal={false} />);

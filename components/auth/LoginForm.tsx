@@ -16,6 +16,7 @@ import { LoginInputs, loginSchema } from "@/validators/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { login } from "@/actions/auth/login";
 import { FieldError } from "../ui/shadcn/field";
+import { getFormErrorMessage } from "../utils";
 
 export default function LoginForm({ isModal = false }: { isModal?: boolean }) {
   const {
@@ -28,14 +29,9 @@ export default function LoginForm({ isModal = false }: { isModal?: boolean }) {
   const onSubmit = async (data: LoginInputs) => {
     const { error } = await login(data);
 
-    if (error) {
-      const message =
-        "errorMessage" in error
-          ? error.errorMessage
-          : (error.errors[0] ?? "Login failed");
+    if (!error) return;
 
-      setError("root", { message });
-    }
+    setError("root", { message: getFormErrorMessage(error) });
   };
 
   return (

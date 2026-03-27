@@ -70,7 +70,7 @@ describe("LoginForm", () => {
   it("should display error message if the email is invalid", async () => {
     const errorMessage = "Invalid email or password";
     jest.mocked(login).mockResolvedValueOnce({
-      error: { errorMessage },
+      error: errorMessage,
     } as never);
     render(<LoginForm isModal />);
 

@@ -18,7 +18,7 @@ export default function Settings() {
 
   const handleLogout = async () => {
     const result = await signOut();
-    if (result && !result.error) {
+    if (result?.success) {
       router.push("/");
     }
   };

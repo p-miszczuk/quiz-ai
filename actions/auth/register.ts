@@ -15,11 +15,14 @@ export async function register(data: RegisterInputs) {
     return { error: setTreeifyError(validatedData.error) };
   }
 
-  const { error, data: result } = await createUser(data);
+  const result = await createUser(data);
 
-  if (result?.user?.id) {
+  if (result.success) {
     return redirect("/dashboard");
   }
 
-  return { error };
+  const message =
+    "error" in result.error ? (result.error.error as string) : "Login failed";
+
+  return { error: message };
 }

@@ -58,6 +58,7 @@ describe("register", () => {
     } as never);
 
     (createUser as jest.Mock).mockResolvedValue({
+      success: true,
       data: { user: { id: "123" } },
     });
 
@@ -73,10 +74,11 @@ describe("register", () => {
     } as never);
 
     (createUser as jest.Mock).mockResolvedValue({
-      error: { errorMessage: "User creation failed" },
+      success: false,
+      error: { type: "better-auth-error", error: "User creation failed" },
     });
 
     const result = await register(mockData);
-    expect(result).toEqual({ error: { errorMessage: "User creation failed" } });
+    expect(result).toEqual({ error: "User creation failed" });
   });
 });

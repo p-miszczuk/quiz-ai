@@ -1,11 +1,13 @@
-import { getCurrentUser } from "@/lib/auth";
-import { redirect } from "next/navigation";
+import { dalVerifySuccess } from "@/lib/dal/helpers";
+import { getUserQuizzes } from "./_dal/queries";
 
 export default async function DashboardPage() {
-  const user = await getCurrentUser();
+  const quizzes = dalVerifySuccess(await getUserQuizzes());
 
-  if (!user?.id) {
-    redirect("/login");
-  }
-  return <div>Dashboard</div>;
+  return (
+    <div>
+      <div>Dashboard</div>
+      <code>{JSON.stringify(quizzes, null, 2)}</code>
+    </div>
+  );
 }

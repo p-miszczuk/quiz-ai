@@ -20,7 +20,7 @@ describe("createUser", () => {
     jest.clearAllMocks();
   });
 
-  it("should return an error if all fields are not provided", async () => {
+  it("should return an error if all fields are not provided in sign up", async () => {
     const result = await createUser({
       email: "",
       password: "",
@@ -29,12 +29,15 @@ describe("createUser", () => {
     });
 
     expect(result).toEqual({
-      data: null,
-      error: { errorMessage: "All fields are required" },
+      success: false,
+      error: {
+        type: "validation-error",
+        error: "All fields are required",
+      },
     });
   });
 
-  it("should return success response if all fields are provided", async () => {
+  it("should return success response if all fields are provided in sign up", async () => {
     jest.mocked(auth.api.signUpEmail).mockResolvedValue({
       user: { id: "123" },
     } as never);
@@ -52,7 +55,7 @@ describe("createUser", () => {
           id: "123",
         },
       },
-      error: null,
+      success: true,
     });
   });
 
@@ -69,12 +72,15 @@ describe("createUser", () => {
     });
 
     expect(result).toEqual({
-      data: null,
-      error: { errorMessage: "User already exists. Use another email." },
+      success: false,
+      error: {
+        type: "better-auth-error",
+        error: "User already exists. Use another email.",
+      },
     });
   });
 
-  it("should return an error if an unknown error occurs", async () => {
+  it("should return an error if an unknown error occurs after sign up", async () => {
     jest.mocked(auth.api.signUpEmail).mockRejectedValue("unknown error");
 
     const result = await createUser({
@@ -85,8 +91,11 @@ describe("createUser", () => {
     });
 
     expect(result).toEqual({
-      data: null,
-      error: { errorMessage: "Unknown error" },
+      success: false,
+      error: {
+        type: "unknown-error",
+        error: "unknown error",
+      },
     });
   });
 });
@@ -96,19 +105,22 @@ describe("signIn", () => {
     jest.clearAllMocks();
   });
 
-  it("should return an error if all fields are not provided", async () => {
+  it("should return an error if all fields are not provided in sign in", async () => {
     const result = await signIn({
       email: "",
       password: "",
     });
 
     expect(result).toEqual({
-      data: null,
-      error: { errorMessage: "All fields are required" },
+      success: false,
+      error: {
+        type: "validation-error",
+        error: "All fields are required",
+      },
     });
   });
 
-  it("should return success response if all fields are provided", async () => {
+  it("should return success response if all fields are provided in sign in", async () => {
     jest.mocked(auth.api.signInEmail).mockResolvedValue({
       user: { id: "123" },
     } as never);
@@ -122,7 +134,7 @@ describe("signIn", () => {
       data: {
         user: { id: "123" },
       },
-      error: null,
+      success: true,
     });
   });
 
@@ -137,12 +149,15 @@ describe("signIn", () => {
     });
 
     expect(result).toEqual({
-      data: null,
-      error: { errorMessage: "Invalid email or password" },
+      success: false,
+      error: {
+        type: "better-auth-error",
+        error: "Invalid email or password",
+      },
     });
   });
 
-  it("should return an error if an unknown error occurs", async () => {
+  it("should return an error if an unknown error occurs after sign in", async () => {
     jest.mocked(auth.api.signInEmail).mockRejectedValue("unknown error");
 
     const result = await signIn({
@@ -151,8 +166,11 @@ describe("signIn", () => {
     });
 
     expect(result).toEqual({
-      data: null,
-      error: { errorMessage: "Unknown error" },
+      success: false,
+      error: {
+        type: "unknown-error",
+        error: "unknown error",
+      },
     });
   });
 });
@@ -162,24 +180,17 @@ describe("signOut", () => {
     jest.clearAllMocks();
   });
 
-  it("should return an error if an unknown error occurs", async () => {
+  it("should return an error if an unknown error occurs after sign out", async () => {
     jest.mocked(auth.api.signOut).mockRejectedValue("unknown error");
 
     const result = await signOut();
 
     expect(result).toEqual({
-      data: null,
-      error: { errorMessage: "Unknown error" },
+      success: false,
+      error: {
+        type: "unknown-error",
+        error: "unknown error",
+      },
     });
-  });
-
-  it("should return undefined if the sign out is successful", async () => {
-    jest.mocked(auth.api.signOut).mockResolvedValue({
-      user: { id: "123" },
-    } as never);
-
-    const result = await signOut();
-
-    expect(result).toBeUndefined();
   });
 });

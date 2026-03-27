@@ -16,6 +16,7 @@ import { RegisterInputs, registerSchema } from "@/validators/auth";
 import { FieldError } from "@/components/ui/shadcn/field";
 import RedirectForm from "./components/RedirectForm";
 import { register } from "@/actions/auth/register";
+import { getFormErrorMessage } from "../utils";
 
 export default function Register({ isModal = false }: { isModal?: boolean }) {
   const {
@@ -28,16 +29,9 @@ export default function Register({ isModal = false }: { isModal?: boolean }) {
   const onSubmit = async (data: RegisterInputs) => {
     const { error } = await register(data);
 
-    if (error) {
-      const message =
-        "errorMessage" in error
-          ? error.errorMessage
-          : (error.errors[0] ?? "Registration failed");
+    if (!error) return;
 
-      setError("root", {
-        message,
-      });
-    }
+    setError("root", { message: getFormErrorMessage(error) });
   };
 
   return (
