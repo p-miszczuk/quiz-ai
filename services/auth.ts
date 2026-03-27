@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@/lib/auth";
-import { errorResponse, successResponse } from "@/lib/dal/types";
+import { errorResponse, successResponse } from "@/lib/query";
 import { LoginInputs, RegisterInputs } from "@/validators/auth";
 import { headers } from "next/headers";
 

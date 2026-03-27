@@ -1,8 +1,8 @@
-import { dalVerifySuccess } from "@/lib/dal/helpers";
-import { getUserQuizzes } from "./_dal/queries";
+import { verifySuccess } from "@/lib/query";
+import { getUserQuizzes } from "@/services/quiz";
 
 export default async function DashboardPage() {
-  const quizzes = dalVerifySuccess(await getUserQuizzes());
+  const quizzes = verifySuccess(await getUserQuizzes());
 
   return (
     <div>

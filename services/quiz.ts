@@ -1,8 +1,14 @@
-import { dalDbQuery } from "@/lib/dal/helpers";
+import { dbQuery, requireAuth } from "@/lib/query";
 import { UserId } from "@/types/user";
 
+export const getUserQuizzes = async () => {
+  return requireAuth((user) => {
+    return findQuizzesByUserId(user.id);
+  });
+};
+
 export const findQuizzesByUserId = async (userId: UserId) => {
-  return dalDbQuery(async () => {
+  return dbQuery(async () => {
     return [
       {
         id: "1",
