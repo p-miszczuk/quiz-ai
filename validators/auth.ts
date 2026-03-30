@@ -1,3 +1,4 @@
+import { match } from "assert";
 import { z } from "zod";
 
 export const REGISTER_ERRORS = {
@@ -13,6 +14,10 @@ export const REGISTER_ERRORS = {
 export const LOGIN_ERRORS = {
   email: "Invalid email address",
   password: "Password is required",
+} as const satisfies Record<string, string>;
+
+export const CHANGE_PASSWORD_ERRORS = {
+  currentPassword: "Current password is required",
 } as const satisfies Record<string, string>;
 
 const emailPattern =
@@ -49,9 +54,19 @@ export const loginSchema = z.object({
   password: z.string().min(1, { message: LOGIN_ERRORS.password }),
 });
 
+export const changePasswordSchema = z.object({
+  currentPassword: z
+    .string()
+    .min(1, { message: CHANGE_PASSWORD_ERRORS.currentPassword }),
+  newPassword: registerSchema.shape.password,
+  confirmNewPassword: registerSchema.shape.confirmPassword,
+});
+
 export type RegisterInputs = z.infer<typeof registerSchema>;
 
 export type LoginInputs = z.infer<typeof loginSchema>;
+
+export type ChangePasswordInputs = z.infer<typeof changePasswordSchema>;
 
 export const setTreeifyError = (error: z.ZodError) => {
   return z.treeifyError(error);

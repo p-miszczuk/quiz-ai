@@ -2,7 +2,11 @@
 
 import { auth } from "@/lib/auth";
 import { errorResponse, successResponse } from "@/lib/query";
-import { LoginInputs, RegisterInputs } from "@/validators/auth";
+import {
+  ChangePasswordInputs,
+  LoginInputs,
+  RegisterInputs,
+} from "@/validators/auth";
 import { headers } from "next/headers";
 
 export const createUser = async (data: RegisterInputs) => {
@@ -81,6 +85,42 @@ export const signOut = async () => {
     return successResponse(
       await auth.api.signOut({
         headers: (await headers()) as HeadersInit,
+      }),
+    );
+  } catch (error: unknown) {
+    if (typeof error === "object" && error !== null && "message" in error) {
+      return errorResponse({
+        type: "better-auth-error",
+        error: error.message as string,
+      });
+    }
+
+    return errorResponse({
+      type: "unknown-error",
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+};
+
+export const changePassword = async (data: ChangePasswordInputs) => {
+  const { currentPassword, newPassword } = data || {};
+
+  if (!currentPassword || !newPassword) {
+    return errorResponse({
+      type: "validation-error",
+      error: "All fields are required",
+    });
+  }
+
+  try {
+    return successResponse(
+      await auth.api.changePassword({
+        headers: (await headers()) as HeadersInit,
+        body: {
+          currentPassword,
+          newPassword,
+          revokeOtherSessions: true,
+        },
       }),
     );
   } catch (error: unknown) {

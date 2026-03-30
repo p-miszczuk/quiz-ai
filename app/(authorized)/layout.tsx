@@ -11,7 +11,7 @@ export default function AuthLayout({
     <>
       <Header />
       <RouteLoadingWrapper>
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 w-full py-3">{children}</main>
       </RouteLoadingWrapper>
       <Footer />
     </>
