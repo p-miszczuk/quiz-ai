@@ -19,7 +19,17 @@ type FormHelpers<T extends FieldValues> = {
   register: UseFormRegister<T>;
   errors: FieldErrors<T>;
   isSubmitting: boolean;
+  isSubmitSuccessful: boolean;
 };
+
+interface FormWrapperProps<T extends FieldValues> {
+  schema: ZodType<T, T>;
+  action: (data: T) => Promise<{ error?: string }>;
+  children: (formHelpers: FormHelpers<T>) => React.ReactNode;
+  description: string;
+  title: string;
+  testId: string;
+}
 
 export default function FormWrapper<T extends FieldValues>({
   schema,
@@ -27,17 +37,12 @@ export default function FormWrapper<T extends FieldValues>({
   children,
   description,
   title,
-}: {
-  schema: ZodType<T, T>;
-  action: (data: T) => Promise<{ error?: string }>;
-  children: (formHelpers: FormHelpers<T>) => React.ReactNode;
-  description: string;
-  title: string;
-}) {
+  testId = "form",
+}: FormWrapperProps<T>) {
   const {
     register: formRegister,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isSubmitSuccessful },
     setError,
   } = useForm<T>({ resolver: zodResolver(schema) as Resolver<T> });
 
@@ -60,13 +65,14 @@ export default function FormWrapper<T extends FieldValues>({
       <CardContent>
         <form
           className="flex flex-col gap-4"
-          data-testid="login-form"
           onSubmit={handleSubmit(onSubmit)}
+          data-testid={testId}
         >
           {children({
             register: formRegister,
             errors,
             isSubmitting,
+            isSubmitSuccessful,
           })}
         </form>
       </CardContent>

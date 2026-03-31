@@ -1,3 +1,4 @@
+import ChangePasswordForm from "@/components/authorized/ChangePasswordForm";
 import {
   Tabs,
   TabsContent,
@@ -24,7 +25,7 @@ export default async function SettingsPage() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="change-password">
-          <div>Change Password</div>
+          <ChangePasswordForm />
         </TabsContent>
         <TabsContent value="remove-account">
           <div>Remove Account</div>

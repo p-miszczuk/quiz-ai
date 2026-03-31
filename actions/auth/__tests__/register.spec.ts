@@ -1,4 +1,4 @@
-import { registerSchema, setTreeifyError } from "@/validators/auth";
+import { registerSchema } from "@/validators/auth";
 import { register } from "../register";
 import { createUser } from "@/services/auth";
 import { redirect } from "next/navigation";
@@ -42,13 +42,8 @@ describe("register", () => {
       error: mockError,
     } as never);
 
-    jest.mocked(setTreeifyError).mockReturnValue("FORM_ERROR" as never);
-
     const result = await register(mockData);
-    expect(result).toEqual({ error: "FORM_ERROR" });
-    expect(setTreeifyError).toHaveBeenCalledWith(
-      expect.objectContaining({ message: "Invalid data" }),
-    );
+    expect(result).toEqual({ error: "Validation failed" });
   });
 
   it("should redirect to dashboard if user is created successfully", async () => {

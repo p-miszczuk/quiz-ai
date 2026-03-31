@@ -3,11 +3,11 @@
 import { InputField } from "../ui/fields/InputField";
 import { Button } from "../ui/shadcn/button";
 import { Card, CardFooter } from "../ui/shadcn/card";
-import RedirectForm from "./components/RedirectForm";
 import { login } from "@/actions/auth/login";
 import { FieldError } from "../ui/shadcn/field";
-import FormWrapper from "../ui/FormWrapper";
 import { loginSchema } from "@/validators/auth";
+import RedirectForm from "./components/RedirectForm";
+import FormWrapper from "../ui/FormWrapper";
 
 export default function LoginForm({ isModal = false }: { isModal?: boolean }) {
   return (
@@ -15,6 +15,7 @@ export default function LoginForm({ isModal = false }: { isModal?: boolean }) {
       <FormWrapper
         schema={loginSchema}
         action={login}
+        testId="login-form"
         title="Login"
         description="Enter your email and password to login to your account"
       >

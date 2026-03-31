@@ -9,10 +9,16 @@ import {
 } from "@/validators/auth";
 import { headers } from "next/headers";
 
+const trimString = (str: string) => str?.trim();
+
 export const createUser = async (data: RegisterInputs) => {
   const { email, password, name } = data || {};
 
-  if (!email || !password || !name) {
+  const trimmedEmail = trimString(email);
+  const trimmedPassword = trimString(password);
+  const trimmedName = trimString(name);
+
+  if (!trimmedEmail || !trimmedPassword || !trimmedName) {
     return errorResponse({
       type: "validation-error",
       error: "All fields are required",
@@ -24,9 +30,9 @@ export const createUser = async (data: RegisterInputs) => {
       await auth.api.signUpEmail({
         headers: (await headers()) as HeadersInit,
         body: {
-          email,
-          password,
-          name,
+          email: trimmedEmail,
+          password: trimmedPassword,
+          name: trimmedName,
         },
       }),
     );
@@ -48,7 +54,10 @@ export const createUser = async (data: RegisterInputs) => {
 export const signIn = async (data: LoginInputs) => {
   const { email, password } = data || {};
 
-  if (!email || !password) {
+  const trimmedEmail = trimString(email);
+  const trimmedPassword = trimString(password);
+
+  if (!trimmedEmail || !trimmedPassword) {
     return errorResponse({
       type: "validation-error",
       error: "All fields are required",
@@ -60,8 +69,8 @@ export const signIn = async (data: LoginInputs) => {
       await auth.api.signInEmail({
         headers: (await headers()) as HeadersInit,
         body: {
-          email,
-          password,
+          email: trimmedEmail,
+          password: trimmedPassword,
         },
       }),
     );
@@ -102,10 +111,15 @@ export const signOut = async () => {
   }
 };
 
-export const changePassword = async (data: ChangePasswordInputs) => {
+export const setNewPassword = async (
+  data: Omit<ChangePasswordInputs, "confirmNewPassword">,
+) => {
   const { currentPassword, newPassword } = data || {};
 
-  if (!currentPassword || !newPassword) {
+  const trimmedCurrentPassword = trimString(currentPassword);
+  const trimmedNewPassword = trimString(newPassword);
+
+  if (!trimmedCurrentPassword || !trimmedNewPassword) {
     return errorResponse({
       type: "validation-error",
       error: "All fields are required",
@@ -117,8 +131,8 @@ export const changePassword = async (data: ChangePasswordInputs) => {
       await auth.api.changePassword({
         headers: (await headers()) as HeadersInit,
         body: {
-          currentPassword,
-          newPassword,
+          currentPassword: trimmedCurrentPassword,
+          newPassword: trimmedNewPassword,
           revokeOtherSessions: true,
         },
       }),

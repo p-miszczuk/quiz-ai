@@ -1,98 +1,74 @@
 "use client";
 
 import { InputField } from "@/components/ui/fields/InputField";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/shadcn/card";
+import { Card, CardFooter } from "@/components/ui/shadcn/card";
 import { Button } from "@/components/ui/shadcn/button";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { RegisterInputs, registerSchema } from "@/validators/auth";
+import { registerSchema } from "@/validators/auth";
 import { FieldError } from "@/components/ui/shadcn/field";
-import RedirectForm from "./components/RedirectForm";
 import { register } from "@/actions/auth/register";
-import { getFormErrorMessage } from "../utils";
+import RedirectForm from "./components/RedirectForm";
+import FormWrapper from "../ui/FormWrapper";
 
-export default function Register({ isModal = false }: { isModal?: boolean }) {
-  const {
-    register: formRegister,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    setError,
-  } = useForm<RegisterInputs>({ resolver: zodResolver(registerSchema) });
-
-  const onSubmit = async (data: RegisterInputs) => {
-    const { error } = await register(data);
-
-    if (!error) return;
-
-    setError("root", { message: getFormErrorMessage(error) });
-  };
-
+export default function RegisterForm({
+  isModal = false,
+}: {
+  isModal?: boolean;
+}) {
   return (
     <div className="w-full shadow-lg">
       <Card className="w-full shadow-lg">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">
-            Register
-          </CardTitle>
-          <CardDescription className="text-center">
-            Enter your email and password to login to your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form
-            className="flex flex-col gap-4"
-            onSubmit={handleSubmit(onSubmit)}
-            data-testid="register-form"
-          >
-            <InputField
-              id="email"
-              type="email"
-              placeholder="Enter your email"
-              label="Email"
-              data-testid="email-input"
-              errorMessage={errors?.email?.message}
-              {...formRegister("email")}
-            />
-            <InputField
-              id="password"
-              type="password"
-              placeholder="Enter your password"
-              label="Password"
-              data-testid="password-input"
-              errorMessage={errors?.password?.message}
-              {...formRegister("password")}
-            />
-            <InputField
-              id="confirm-password"
-              type="password"
-              placeholder="Confirm your password"
-              label="Confirm Password"
-              data-testid="confirm-password-input"
-              errorMessage={errors?.confirmPassword?.message}
-              {...formRegister("confirmPassword")}
-            />
-            <InputField
-              id="name"
-              type="text"
-              placeholder="Enter your name"
-              label="Name"
-              data-testid="name-input"
-              errorMessage={errors?.name?.message}
-              {...formRegister("name")}
-            />
-            {errors.root && <FieldError>{errors.root.message}</FieldError>}
-            <Button size="lg" type="submit" disabled={isSubmitting}>
-              Register
-            </Button>
-          </form>
-        </CardContent>
+        <FormWrapper
+          schema={registerSchema}
+          action={register}
+          testId="register-form"
+          title="Register"
+          description="Enter your email and password to register to your account"
+        >
+          {({ register, errors, isSubmitting }) => (
+            <>
+              <InputField
+                id="email"
+                type="email"
+                placeholder="Enter your email"
+                label="Email"
+                data-testid="email-input"
+                errorMessage={errors?.email?.message}
+                {...register("email")}
+              />
+              <InputField
+                id="password"
+                type="password"
+                placeholder="Enter your password"
+                label="Password"
+                data-testid="password-input"
+                errorMessage={errors?.password?.message}
+                {...register("password")}
+              />
+              <InputField
+                id="confirm-password"
+                type="password"
+                placeholder="Confirm your password"
+                label="Confirm Password"
+                data-testid="confirm-password-input"
+                errorMessage={errors?.confirmPassword?.message}
+                {...register("confirmPassword")}
+              />
+              <InputField
+                id="name"
+                type="text"
+                placeholder="Enter your name"
+                label="Name"
+                data-testid="name-input"
+                errorMessage={errors?.name?.message}
+                {...register("name")}
+              />
+              {errors.root && <FieldError>{errors.root.message}</FieldError>}
+              <Button size="lg" type="submit" disabled={isSubmitting}>
+                Register
+              </Button>
+            </>
+          )}
+        </FormWrapper>
         <CardFooter className="justify-center text-sm text-gray-500">
           <RedirectForm
             isModal={isModal}
