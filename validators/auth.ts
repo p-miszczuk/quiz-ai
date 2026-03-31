@@ -1,4 +1,3 @@
-import { match } from "assert";
 import { z } from "zod";
 
 export const REGISTER_ERRORS = {
