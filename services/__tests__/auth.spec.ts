@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth";
-import { createUser, signIn, signOut } from "../auth";
+import { setNewPassword, createUser, signIn, signOut } from "../auth";
 
 jest.mock("next/headers", () => ({
   headers: jest.fn().mockResolvedValue(new Headers()),
@@ -11,6 +11,7 @@ jest.mock("@/lib/auth", () => ({
       signUpEmail: jest.fn(),
       signInEmail: jest.fn(),
       signOut: jest.fn(),
+      changePassword: jest.fn(),
     },
   },
 }));
@@ -192,5 +193,55 @@ describe("signOut", () => {
         error: "unknown error",
       },
     });
+  });
+});
+
+describe("setNewPassword", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should return an error if all fields are not provided in change password", async () => {
+    const result = await setNewPassword({
+      currentPassword: "",
+      newPassword: "Password123!",
+    });
+
+    expect(result).toEqual({
+      success: false,
+      error: {
+        type: "validation-error",
+        error: "All fields are required",
+      },
+    });
+  });
+
+  it("should return error if password hasn't been changed", async () => {
+    jest.mocked(auth.api.changePassword).mockRejectedValue({
+      message: "Password not changed",
+    } as never);
+
+    const result = await setNewPassword({
+      currentPassword: "Password123!",
+      newPassword: "Password123!1",
+    });
+
+    expect(result).toEqual({
+      success: false,
+      error: { type: "better-auth-error", error: "Password not changed" },
+    });
+  });
+
+  it("should return success if password has been changed", async () => {
+    jest.mocked(auth.api.changePassword).mockResolvedValue({
+      success: true,
+    } as never);
+
+    const result = await setNewPassword({
+      currentPassword: "Password123!",
+      newPassword: "Password123!",
+    });
+
+    expect(result).toEqual({ success: true, data: { success: true } });
   });
 });
