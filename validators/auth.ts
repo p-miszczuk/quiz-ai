@@ -19,6 +19,10 @@ export const CHANGE_PASSWORD_ERRORS = {
   currentPassword: "Current password is required",
 } as const satisfies Record<string, string>;
 
+export const REMOVE_ACCOUNT_ERRORS = {
+  currentPassword: "Current password is required",
+} as const satisfies Record<string, string>;
+
 const emailPattern =
   /^(?!\.)(?!.*\.\.)([a-z0-9_'+\-\.]*)[a-z0-9_+-]@([a-z0-9][a-z0-9\-]*\.)+[a-z]{2,}$/i;
 
@@ -61,11 +65,16 @@ export const changePasswordSchema = z.object({
   confirmNewPassword: registerSchema.shape.confirmPassword,
 });
 
+export const deleteUserSchema = z.object({
+  currentPassword: z
+    .string()
+    .min(1, { message: REMOVE_ACCOUNT_ERRORS.currentPassword }),
+});
+
 export type RegisterInputs = z.infer<typeof registerSchema>;
-
 export type LoginInputs = z.infer<typeof loginSchema>;
-
 export type ChangePasswordInputs = z.infer<typeof changePasswordSchema>;
+export type DeleteUserInputs = z.infer<typeof deleteUserSchema>;
 
 export const setTreeifyError = (error: z.ZodError) => {
   return z.treeifyError(error);

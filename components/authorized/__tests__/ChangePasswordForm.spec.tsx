@@ -1,8 +1,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { CHANGE_PASSWORD_ERRORS, REGISTER_ERRORS } from "@/validators/auth";
-import ChangePasswordForm from "../ChangePasswordForm";
-import { fillInputs } from "@/components/auth/__tests__/RegisterForm.spec";
 import { changePassword } from "@/actions/auth/change-password";
+import ChangePasswordForm from "../ChangePasswordForm";
 
 jest.mock("@/actions/auth/change-password", () => ({
   changePassword: jest.fn(),

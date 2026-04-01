@@ -37,7 +37,9 @@ export function loginRedirect<T, E extends ServiceError>(
   result: ServiceReturn<T, E>,
 ) {
   if (result.success) return result;
-  if (result.error.type === "no-user") return redirect("/login");
+  if (result.error.type === "no-user") {
+    return redirect("/login");
+  }
 
   return result as ServiceReturn<T, Exclude<E, { type: "no-user" }>>;
 }

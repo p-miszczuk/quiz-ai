@@ -37,6 +37,11 @@ export const auth = betterAuth({
       maxAge: 7 * 24 * 60 * 60, // 7 days in seconds
     },
   },
+  user: {
+    deleteUser: {
+      enabled: true,
+    },
+  },
 });
 
 export const getCurrentUser = cache(async () => {

@@ -1,5 +1,11 @@
 import { auth } from "@/lib/auth";
-import { setNewPassword, createUser, signIn, signOut } from "../auth";
+import {
+  setNewPassword,
+  createUser,
+  signIn,
+  signOut,
+  deleteUser,
+} from "../auth";
 
 jest.mock("next/headers", () => ({
   headers: jest.fn().mockResolvedValue(new Headers()),
@@ -12,6 +18,7 @@ jest.mock("@/lib/auth", () => ({
       signInEmail: jest.fn(),
       signOut: jest.fn(),
       changePassword: jest.fn(),
+      deleteUser: jest.fn(),
     },
   },
 }));
@@ -240,6 +247,54 @@ describe("setNewPassword", () => {
     const result = await setNewPassword({
       currentPassword: "Password123!",
       newPassword: "Password123!",
+    });
+
+    expect(result).toEqual({ success: true, data: { success: true } });
+  });
+});
+
+describe("deleteUser", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should return an error if password filed is not provided in delete user", async () => {
+    const result = await deleteUser({
+      currentPassword: "",
+    });
+
+    expect(result).toEqual({
+      success: false,
+      error: {
+        type: "validation-error",
+        error: "Password is required",
+      },
+    });
+  });
+
+  it("should return an error if an unknown error occurs after delete user", async () => {
+    jest.mocked(auth.api.deleteUser).mockRejectedValue("Delete user failed");
+
+    const result = await deleteUser({
+      currentPassword: "Password123!",
+    });
+
+    expect(result).toEqual({
+      success: false,
+      error: {
+        type: "unknown-error",
+        error: "Delete user failed",
+      },
+    });
+  });
+
+  it("should return success if delete user succeeds", async () => {
+    jest.mocked(auth.api.deleteUser).mockResolvedValue({
+      success: true,
+    } as never);
+
+    const result = await deleteUser({
+      currentPassword: "Password123!",
     });
 
     expect(result).toEqual({ success: true, data: { success: true } });

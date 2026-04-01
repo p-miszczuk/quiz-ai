@@ -1,4 +1,5 @@
 import ChangePasswordForm from "@/components/authorized/ChangePasswordForm";
+import DeleteAccountForm from "@/components/authorized/DeleteAccountForm";
 import {
   Tabs,
   TabsContent,
@@ -9,9 +10,7 @@ import { verifySuccess } from "@/lib/query";
 import { getUserSettings } from "@/services/settings";
 
 export default async function SettingsPage() {
-  const user = verifySuccess(await getUserSettings());
-
-  console.log("user", user);
+  verifySuccess(await getUserSettings());
 
   return (
     <section>
@@ -28,7 +27,7 @@ export default async function SettingsPage() {
           <ChangePasswordForm />
         </TabsContent>
         <TabsContent value="remove-account">
-          <div>Remove Account</div>
+          <DeleteAccountForm />
         </TabsContent>
       </Tabs>
     </section>

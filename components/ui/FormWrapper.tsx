@@ -14,6 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./shadcn/card";
+import { useRouter } from "next/navigation";
 
 type FormHelpers<T extends FieldValues> = {
   register: UseFormRegister<T>;
@@ -29,6 +30,7 @@ interface FormWrapperProps<T extends FieldValues> {
   description: string;
   title: string;
   testId: string;
+  redirectAfterSuccess?: string;
 }
 
 export default function FormWrapper<T extends FieldValues>({
@@ -38,7 +40,9 @@ export default function FormWrapper<T extends FieldValues>({
   description,
   title,
   testId = "form",
+  redirectAfterSuccess,
 }: FormWrapperProps<T>) {
+  const { push } = useRouter();
   const {
     register: formRegister,
     handleSubmit,
@@ -49,9 +53,15 @@ export default function FormWrapper<T extends FieldValues>({
   const onSubmit = async (data: T) => {
     const { error } = await action(data);
 
-    if (!error) return;
+    if (!!redirectAfterSuccess && !error) {
+      //special condition for deleteUser because of refreshing /settings after deleting user
+      push(redirectAfterSuccess);
+      return;
+    }
 
-    setError("root", { message: getFormErrorMessage(error) });
+    if (!!error) {
+      setError("root", { message: getFormErrorMessage(error) });
+    }
   };
 
   return (
