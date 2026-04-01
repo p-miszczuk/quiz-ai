@@ -29,6 +29,12 @@ jest.mock("next/navigation", () => ({
   }),
 }));
 
+jest.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+  }),
+}));
+
 jest.mock("@/actions/auth/login", () => ({
   login: jest.fn().mockResolvedValue({ error: null }),
 }));

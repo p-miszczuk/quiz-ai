@@ -7,6 +7,12 @@ jest.mock("@/actions/auth/change-password", () => ({
   changePassword: jest.fn(),
 }));
 
+jest.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+  }),
+}));
+
 jest.mock("@/validators/auth", () => {
   const actual =
     jest.requireActual<typeof import("@/validators/auth")>("@/validators/auth");
