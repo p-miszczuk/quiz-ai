@@ -1,5 +1,6 @@
-import { dbQuery, requireAuth } from "@/lib/query";
+import { dbQuery, errorResponse, requireAuth } from "@/lib/query";
 import { UserId } from "@/types/user";
+import { CreateNewQuizInputs } from "@/validators/quiz";
 
 export const getUserQuizzes = async () => {
   return requireAuth((user) => {
@@ -7,7 +8,7 @@ export const getUserQuizzes = async () => {
   });
 };
 
-export const findQuizzesByUserId = async (userId: UserId) => {
+const findQuizzesByUserId = async (userId: UserId) => {
   return dbQuery(async () => {
     return [
       {
@@ -28,4 +29,30 @@ export const findQuizzesByUserId = async (userId: UserId) => {
       },
     ];
   });
+};
+
+const createNewQuiz = async (data: CreateNewQuizInputs) => {
+  const title = data.title.trim();
+  const description = data.description.trim();
+
+  if (!title || !description) {
+    return errorResponse({
+      type: "validation-error",
+      error: "Title and description are required",
+    });
+  }
+
+  // return dbQuery(async () => {
+  //     return {
+  //         id: "1",
+  //         name: title,
+  //         description: description,
+  //         createdAt: new Date(),
+  //         updatedAt: new Date(),
+  //     }
+  // })
+};
+
+export const createQuiz = async (data: CreateNewQuizInputs) => {
+  return requireAuth((data: CreateNewQuizInputs) => {});
 };

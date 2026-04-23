@@ -4,39 +4,39 @@ import {
   FieldError,
   FieldLabel,
 } from "@/components/ui/shadcn/field";
-import { Input } from "@/components/ui/shadcn/input";
+import { Textarea } from "@/components/ui/shadcn/textarea";
 
-type InputFieldProps = {
+type TextareaFieldProps = {
   id: string;
-  type: "text" | "password" | "email" | "number";
   placeholder: string;
   label: string;
   description?: string;
   errorMessage?: string;
+  rows?: number;
 };
 
-type InputReadOnlyProps<T extends InputFieldProps> = Readonly<T>;
+type TextareaReadOnlyProps<T extends TextareaFieldProps> = Readonly<T>;
 
-export function InputField({
+export function TextareaField({
   id,
-  type,
   placeholder,
   label,
   description,
   errorMessage,
+  rows = 5,
   ...props
-}: InputReadOnlyProps<InputFieldProps>) {
+}: TextareaReadOnlyProps<TextareaFieldProps>) {
   return (
     <Field>
       <FieldLabel htmlFor={id} data-testid={`${id}-label`}>
         {label}
       </FieldLabel>
-      <Input
+      <Textarea
         id={id}
-        type={type}
         placeholder={placeholder}
         {...props}
-        data-testid={`${id}-input`}
+        data-testid={`${id}-textarea`}
+        rows={rows}
       />
       {description && (
         <FieldDescription data-testid={`${id}-description`}>
