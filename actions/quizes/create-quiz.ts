@@ -1,8 +1,9 @@
 "use server";
 
 import { getTreeifyErrorMessage } from "@/components/utils";
-// import { createNewQuiz } from "@/services/quizes";
+import { createNewServiceQuiz } from "@/services/quiz";
 import { CreateNewQuizInputs, createNewQuizSchema } from "@/validators/quiz";
+import { redirect } from "next/navigation";
 
 export async function createNewQuiz(data: CreateNewQuizInputs) {
   const validatedData = createNewQuizSchema.safeParse(data);
@@ -11,15 +12,10 @@ export async function createNewQuiz(data: CreateNewQuizInputs) {
     return { error: getTreeifyErrorMessage(validatedData.error) };
   }
 
-  //   const result = await createNewQuiz({
-  //     currentPassword: data.currentPassword,
-  //     newPassword: data.newPassword,
-  //   });
-
-  const result = { success: true, error: {} };
+  const result = await createNewServiceQuiz(data);
 
   if (result.success) {
-    return { success: true };
+    return redirect("/dashboard");
   }
 
   const message =

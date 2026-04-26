@@ -1,6 +1,7 @@
 import { dbQuery, errorResponse, requireAuth } from "@/lib/query";
 import { UserId } from "@/types/user";
 import { CreateNewQuizInputs } from "@/validators/quiz";
+import { db } from "@/lib/db";
 
 export const getUserQuizzes = async () => {
   return requireAuth((user) => {
@@ -10,28 +11,17 @@ export const getUserQuizzes = async () => {
 
 const findQuizzesByUserId = async (userId: UserId) => {
   return dbQuery(async () => {
-    return [
-      {
-        id: "1",
-        name: "Quiz 1",
-        description: "Quiz 1 description",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        userId,
-      },
-      {
-        id: "2",
-        name: "Quiz 2",
-        description: "Quiz 2 description",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        userId,
-      },
-    ];
+    return db.collection("quizzes").find({ userId }).toArray();
   });
 };
 
-const createNewQuiz = async (data: CreateNewQuizInputs) => {
+export const createNewServiceQuiz = async (data: CreateNewQuizInputs) => {
+  return requireAuth((user) => {
+    return createQuiz(user.id, data);
+  });
+};
+
+const createQuiz = async (userId: UserId, data: CreateNewQuizInputs) => {
   const title = data.title.trim();
   const description = data.description.trim();
 
@@ -42,17 +32,18 @@ const createNewQuiz = async (data: CreateNewQuizInputs) => {
     });
   }
 
-  // return dbQuery(async () => {
-  //     return {
-  //         id: "1",
-  //         name: title,
-  //         description: description,
-  //         createdAt: new Date(),
-  //         updatedAt: new Date(),
-  //     }
-  // })
-};
+  return dbQuery(async () => {
+    const now = new Date();
 
-export const createQuiz = async (data: CreateNewQuizInputs) => {
-  return requireAuth((data: CreateNewQuizInputs) => {});
+    const quiz = {
+      name: title,
+      description,
+      createdAt: now,
+      updatedAt: now,
+      status: "pending",
+      userId: userId,
+    };
+
+    return await db.collection("quizzes").insertOne(quiz);
+  });
 };
