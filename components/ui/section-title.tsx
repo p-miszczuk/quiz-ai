@@ -5,6 +5,7 @@ type SectionTitleProps = {
   description?: string;
   titleColor?: string;
   descriptionColor?: string;
+  position?: "left" | "center" | "right";
 };
 
 export default function SectionTitle({
@@ -12,10 +13,17 @@ export default function SectionTitle({
   description,
   titleColor = "text-gray-900",
   descriptionColor = "text-gray-500",
+  position = "left",
 }: SectionTitleProps) {
   return (
     <>
-      <h2 className={cn("text-3xl font-bold text-center mb-2", titleColor)}>
+      <h2
+        className={cn(
+          "text-3xl font-bold text-center mb-2",
+          titleColor,
+          position,
+        )}
+      >
         {title}
       </h2>
       {description && (

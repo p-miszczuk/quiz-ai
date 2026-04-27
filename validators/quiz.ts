@@ -9,13 +9,13 @@ export const createNewQuizSchema = z.object({
 });
 
 export const quiziesSchema = z.object({
-  id: z.string(),
+  _id: z.string(),
   name: z.string(),
   description: z.string(),
+  content: z.any(),
   createdAt: z.date(),
   updatedAt: z.date(),
   userId: z.custom<UserId>(),
-  status: z.enum(["pending", "error", "created"]),
 });
 
 export type CreateNewQuizInputs = z.infer<typeof createNewQuizSchema>;

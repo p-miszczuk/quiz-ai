@@ -12,7 +12,8 @@ export type ServiceError =
   | { type: "api-error"; error: string }
   | { type: "unknown-error"; error: string }
   | { type: "validation-error"; error: string }
-  | { type: "better-auth-error"; error: string };
+  | { type: "better-auth-error"; error: string }
+  | { type: "quiz-generation-error"; error: string };
 
 export class ThrowServiceError extends Error {
   serviceError: ServiceError;
