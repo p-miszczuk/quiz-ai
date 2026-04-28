@@ -10,7 +10,10 @@ import { verifySuccess } from "@/lib/query";
 import { getUserSettings } from "@/services/settings";
 
 export default async function SettingsPage() {
-  verifySuccess(await getUserSettings());
+  const { error } = await verifySuccess(await getUserSettings());
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <section>

@@ -17,10 +17,9 @@ export default function CreateNewQuizForm() {
         schema={createNewQuizSchema}
         action={createNewQuiz}
         testId="create-new-quiz-form"
-        title="Create New Quiz"
-        description="Enter the details of the quiz you want to create"
+        title="New Quiz Details"
       >
-        {({ register, errors, isSubmitting, isSubmitSuccessful }) => (
+        {({ register, errors, isSubmitting: isCreating }) => (
           <>
             <InputField
               id="quiz-title"
@@ -43,10 +42,10 @@ export default function CreateNewQuizForm() {
                 {errors.root.message}
               </FieldError>
             )}
-            {isSubmitSuccessful && (
-              <FormSuccessMessage text="Quiz created successfully" />
+            {isCreating && (
+              <FormSuccessMessage text="Quiz is being generated..." />
             )}
-            <Button size="lg" type="submit" disabled={isSubmitting}>
+            <Button size="lg" type="submit" disabled={isCreating}>
               Create Quiz
             </Button>
           </>

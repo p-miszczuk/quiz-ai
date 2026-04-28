@@ -14,7 +14,7 @@ import { ObjectId } from "mongodb";
 import { createQuizArray } from "./utils";
 
 export const getUserQuizzes = async () => {
-  return requireAuth((user) => {
+  return requireAuth(async (user) => {
     return findQuizzesByUserId(user.id);
   });
 };
@@ -63,7 +63,7 @@ const createNewQuiz = async (userId: UserId, data: CreateNewQuizInputs) => {
   if (error) {
     return errorResponse({
       type: "quiz-generation-error",
-      error: error instanceof Error ? error.message : "Unknown error",
+      error: "Failed to generate quiz. Please try again later.",
     });
   }
 

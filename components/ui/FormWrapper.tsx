@@ -27,7 +27,7 @@ interface FormWrapperProps<T extends FieldValues> {
   schema: ZodType<T, T>;
   action: (data: T) => Promise<{ error?: string }>;
   children: (formHelpers: FormHelpers<T>) => React.ReactNode;
-  description: string;
+  description?: string;
   title: string;
   testId: string;
   redirectAfterSuccess?: string;
@@ -70,7 +70,11 @@ export default function FormWrapper<T extends FieldValues>({
         <CardTitle className="text-2xl font-bold text-center">
           {title}
         </CardTitle>
-        <CardDescription className="text-center">{description}</CardDescription>
+        {!!description && (
+          <CardDescription className="text-center">
+            {description}
+          </CardDescription>
+        )}
       </CardHeader>
       <CardContent>
         <form

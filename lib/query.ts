@@ -1,6 +1,7 @@
 import { User } from "@/types/user";
 import { getCurrentUser } from "./auth";
 import { redirect } from "next/navigation";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
 
 export type ServiceReturn<T, E extends ServiceError = ServiceError> =
   | { success: true; data: T }
@@ -63,19 +64,28 @@ export const throwOnError = <T, E extends ServiceError>(
   throw result.error;
 };
 
-export const verifySuccess = <T, E extends ServiceError>(
+export const verifySuccess = async <T, E extends ServiceError>(
   result: ServiceReturn<T, E>,
   {
     redirectTo = "/",
   }: {
     redirectTo?: string;
   } = {},
-): T => {
-  const verified = throwOnError(
-    unauthorizedRedirect(loginRedirect(result), redirectTo),
-  );
+): Promise<{ data: T | null; error: string | null }> => {
+  try {
+    const verified = throwOnError(
+      unauthorizedRedirect(loginRedirect(result), redirectTo),
+    );
 
-  return verified.data;
+    return { data: verified.data, error: null };
+  } catch (err) {
+    if (isRedirectError(err)) throw err;
+    const error =
+      typeof err === "object" && err !== null && "error" in err
+        ? String((err as { error: unknown }).error)
+        : "Something went wrong. Please try again later.";
+    return { data: null, error };
+  }
 };
 
 export const requireAuth = async <T, E extends ServiceError>(
@@ -99,7 +109,7 @@ export const dbQuery = async <T>(callback: () => Promise<T>) => {
 
     return errorResponse({
       type: "unknown-error",
-      error: error instanceof Error ? error.message : String(error),
+      error: "Something went wrong. Please try again later.",
     });
   }
 };
