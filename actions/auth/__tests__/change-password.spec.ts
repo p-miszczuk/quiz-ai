@@ -1,7 +1,7 @@
 import { setNewPassword } from "@/services/auth";
 import { changePassword } from "../change-password";
 import { changePasswordSchema } from "@/validators/auth";
-import { getTreeifyErrorMessage } from "@/components/utils";
+import { getTreeifyErrorMessage } from "@/lib/utils";
 
 jest.mock("@/services/auth", () => ({
   setNewPassword: jest.fn(),
@@ -9,9 +9,7 @@ jest.mock("@/services/auth", () => ({
 
 jest.mock("@/components/utils", () => {
   const actual =
-    jest.requireActual<typeof import("@/components/utils")>(
-      "@/components/utils",
-    );
+    jest.requireActual<typeof import("@/lib/utils")>("@/components/utils");
   return {
     ...actual,
     getTreeifyErrorMessage: jest.fn(),

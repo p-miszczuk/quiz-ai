@@ -1,9 +1,8 @@
 "use server";
 
-import { getTreeifyErrorMessage } from "@/components/utils";
+import { getTreeifyErrorMessage } from "@/lib/utils";
 import { deleteUser } from "@/services/auth";
 import { deleteUserSchema } from "@/validators/auth";
-import { redirect } from "next/navigation";
 
 type DeleteUserAccountData = {
   currentPassword: string;

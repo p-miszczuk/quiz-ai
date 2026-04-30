@@ -1,6 +1,6 @@
 "use server";
 
-import { getTreeifyErrorMessage } from "@/components/utils";
+import { getTreeifyErrorMessage } from "@/lib/utils";
 import { createUser } from "@/services/auth";
 import { RegisterInputs, registerSchema } from "@/validators/auth";
 import { redirect } from "next/navigation";

@@ -2,7 +2,7 @@ import { FieldValues, Resolver, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ZodType } from "zod";
 import { useRouter } from "next/navigation";
-import { getFormErrorMessage } from "@/components/utils";
+import { getFormErrorMessage } from "@/lib/utils";
 import { isDataInResponse } from "@/lib/utils";
 import { FormWrapperProps } from "../FormWrapper";
 

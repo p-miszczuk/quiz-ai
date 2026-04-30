@@ -1,6 +1,6 @@
 "use server";
 
-import { getTreeifyErrorMessage } from "@/components/utils";
+import { getTreeifyErrorMessage } from "@/lib/utils";
 import { setNewPassword } from "@/services/auth";
 import { ChangePasswordInputs, changePasswordSchema } from "@/validators/auth";
 

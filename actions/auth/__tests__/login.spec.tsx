@@ -2,7 +2,7 @@ import { loginSchema } from "@/validators/auth";
 import { login } from "../login";
 import { signIn } from "@/services/auth";
 import { redirect } from "next/navigation";
-import { getTreeifyErrorMessage } from "@/components/utils";
+import { getTreeifyErrorMessage } from "@/lib/utils";
 
 jest.mock("@/services/auth", () => ({
   signIn: jest.fn(),

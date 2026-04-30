@@ -1,6 +1,6 @@
 import { deleteUserSchema, REMOVE_ACCOUNT_ERRORS } from "@/validators/auth";
 import { deleteUserAccount } from "../delete";
-import { getTreeifyErrorMessage } from "@/components/utils";
+import { getTreeifyErrorMessage } from "@/lib/utils";
 import { deleteUser } from "@/services/auth";
 
 jest.mock("@/services/auth", () => ({

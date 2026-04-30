@@ -1,6 +1,6 @@
 "use server";
 
-import { getTreeifyErrorMessage } from "@/components/utils";
+import { getTreeifyErrorMessage } from "@/lib/utils";
 import { createQuiz } from "@/services/quiz";
 import { CreateNewQuizInputs, createNewQuizSchema } from "@/validators/quiz";
 
