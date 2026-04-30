@@ -1,12 +1,4 @@
-import {
-  FieldErrors,
-  FieldValues,
-  Resolver,
-  useForm,
-  UseFormRegister,
-} from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { getFormErrorMessage } from "@/components/utils";
+import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
 import { ZodType } from "zod";
 import {
   CardContent,
@@ -14,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./shadcn/card";
-import { useRouter } from "next/navigation";
+import { useFormWrapper } from "./hooks/useFormWrapper";
 
 type FormHelpers<T extends FieldValues> = {
   register: UseFormRegister<T>;
@@ -23,46 +15,46 @@ type FormHelpers<T extends FieldValues> = {
   isSubmitSuccessful: boolean;
 };
 
-interface FormWrapperProps<T extends FieldValues> {
+export interface FormWrapperProps<T extends FieldValues, R = unknown> {
   schema: ZodType<T, T>;
-  action: (data: T) => Promise<{ error?: string }>;
+  action: (data: T) => Promise<{ error?: string; data?: R }>;
   children: (formHelpers: FormHelpers<T>) => React.ReactNode;
   description?: string;
+  onSuccess?: (data: R, title: string) => void;
+  onSubmitStart?: () => void;
+  onSubmitError?: () => void;
   title: string;
   testId: string;
   redirectAfterSuccess?: string;
 }
 
-export default function FormWrapper<T extends FieldValues>({
+export default function FormWrapper<T extends FieldValues, R = unknown>({
   schema,
   action,
   children,
+  onSuccess,
+  onSubmitStart,
+  onSubmitError,
   description,
   title,
   testId = "form",
   redirectAfterSuccess,
-}: FormWrapperProps<T>) {
-  const { push } = useRouter();
+}: FormWrapperProps<T, R>) {
   const {
     register: formRegister,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
-    setError,
-  } = useForm<T>({ resolver: zodResolver(schema) as Resolver<T> });
-
-  const onSubmit = async (data: T) => {
-    const { error } = await action(data);
-
-    if (!!redirectAfterSuccess && !error) {
-      //special condition for deleteUser because of refreshing /settings after deleting user
-      push(redirectAfterSuccess);
-      return;
-    }
-
-    if (!!error) {
-      setError("root", { message: getFormErrorMessage(error) });
-    }
-  };
+    errors,
+    isSubmitting,
+    isSubmitSuccessful,
+    onSubmit,
+  } = useFormWrapper({
+    schema,
+    action,
+    redirectAfterSuccess,
+    onSuccess,
+    onSubmitStart,
+    onSubmitError,
+  });
 
   return (
     <>

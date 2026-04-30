@@ -13,5 +13,11 @@ export const createQuizArray = (quizContent: string) => {
     .replace(/```\n?/g, "")
     .trim();
 
-  return JSON.parse(cleaned);
+  const data = JSON.parse(cleaned);
+
+  // Use a built-in method for generating a simple unique id
+  return data.map((item: any) => ({
+    ...item,
+    id: crypto.randomUUID(),
+  }));
 };

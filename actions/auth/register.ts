@@ -2,10 +2,7 @@
 
 import { getTreeifyErrorMessage } from "@/components/utils";
 import { createUser } from "@/services/auth";
-import {
-  RegisterInputs,
-  registerSchema,
-} from "@/validators/auth";
+import { RegisterInputs, registerSchema } from "@/validators/auth";
 import { redirect } from "next/navigation";
 
 export async function register(data: RegisterInputs) {

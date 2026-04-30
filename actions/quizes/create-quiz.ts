@@ -3,7 +3,6 @@
 import { getTreeifyErrorMessage } from "@/components/utils";
 import { createQuiz } from "@/services/quiz";
 import { CreateNewQuizInputs, createNewQuizSchema } from "@/validators/quiz";
-import { redirect } from "next/navigation";
 
 export async function createNewQuiz(data: CreateNewQuizInputs) {
   const validatedData = createNewQuizSchema.safeParse(data);
@@ -15,11 +14,11 @@ export async function createNewQuiz(data: CreateNewQuizInputs) {
   const result = await createQuiz(data);
 
   if (result.success) {
-    return redirect("/dashboard");
+    return { data: result.data };
   }
 
   const message =
-    "error" in result.error
+    "error" in result?.error
       ? (result.error.error as string)
       : "Quiz creation failed";
   return { error: message };

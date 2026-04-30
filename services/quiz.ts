@@ -6,6 +6,7 @@ import {
   requireAuth,
   ServiceError,
   ServiceReturn,
+  successResponse,
 } from "@/lib/query";
 import { UserId } from "@/types/user";
 import { CreateNewQuizInputs, type QuiziesSchema } from "@/validators/quiz";
@@ -67,22 +68,23 @@ const createNewQuiz = async (userId: UserId, data: CreateNewQuizInputs) => {
     });
   }
 
-  return dbQuery(async () => {
-    const now = new Date();
+  return successResponse(quizContent);
 
-    const quiz: Omit<QuiziesSchema, "_id"> = {
-      name: title,
-      description,
-      content: quizContent || null,
-      createdAt: now,
-      updatedAt: now,
-      userId: userId,
-    };
+  //   return dbQuery(async () => {
+  //     const now = new Date();
 
-    return await db.collection("quizzes").insertOne(quiz);
-  });
+  //     const quiz: Omit<QuiziesSchema, "_id"> = {
+  //       name: title,
+  //       description,
+  //       content: quizContent || null,
+  //       createdAt: now,
+  //       updatedAt: now,
+  //       userId: userId,
+  //     };
+
+  //     return await db.collection("quizzes").insertOne(quiz);
+  //   });
 };
-
 export const generateQuizInBackground = async (description: string) => {
   try {
     const res = await fetch(process.env.HUGGINGFACE_URL!, {
@@ -99,7 +101,7 @@ export const generateQuizInBackground = async (description: string) => {
         messages: [
           {
             role: "user",
-            content: `{"${description}"}. Insert the key with the right answer (called answer). Do not create objects in answer and do not create objects in possible answers. Stick strictly to the topic. Return a JSON array, nothing else.`,
+            content: `{"${description}"}. Insert the key with the right answer (called answer) - do not forget to add the key "answer" to the object and fill it with the right answer not the number of array!. Do not create objects in answer and do not create objects in possible answers (use key "options" to create the possible answers). Stick strictly to the topic. Return a JSON array, nothing else. Add the key "field_type" with the type of the question (multiple_choice, true_false, short_answer, long_answer)`,
           },
         ],
         temperature: 0.1,
