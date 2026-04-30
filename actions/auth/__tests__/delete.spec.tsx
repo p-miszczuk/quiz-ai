@@ -7,11 +7,9 @@ jest.mock("@/services/auth", () => ({
   deleteUser: jest.fn(),
 }));
 
-jest.mock("@/components/utils", () => {
+jest.mock("@/lib/utils", () => {
   const actual =
-    jest.requireActual<typeof import("@/components/utils")>(
-      "@/components/utils",
-    );
+    jest.requireActual<typeof import("@/lib/utils")>("@/lib/utils");
   return {
     ...actual,
     getTreeifyErrorMessage: jest.fn(),

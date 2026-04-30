@@ -18,7 +18,7 @@ jest.mock("next/navigation", () => ({
   redirect: jest.fn(),
 }));
 
-jest.mock("@/components/utils", () => ({
+jest.mock("@/lib/utils", () => ({
   getTreeifyErrorMessage: jest.fn(),
 }));
 
