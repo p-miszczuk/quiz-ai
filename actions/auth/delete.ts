@@ -14,7 +14,7 @@ export async function deleteUserAccount(data: DeleteUserAccountData) {
   });
 
   if (validatedData?.error) {
-    return { error: getTreeifyErrorMessage(validatedData.error) };
+    return { error: getTreeifyErrorMessage(validatedData) };
   }
 
   const result = await deleteUser(data);

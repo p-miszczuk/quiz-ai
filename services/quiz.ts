@@ -54,7 +54,7 @@ const createNewQuiz = async (data: CreateNewQuizInputs) => {
   if (!title) {
     return errorResponse({
       type: "validation-error",
-      error: "Title and description are required",
+      error: "Title is required",
     });
   }
 

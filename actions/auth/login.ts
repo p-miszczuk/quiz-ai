@@ -9,7 +9,7 @@ export async function login(data: LoginInputs) {
   const validatedData = loginSchema.safeParse(data);
 
   if (validatedData?.error) {
-    return { error: getTreeifyErrorMessage(validatedData.error) };
+    return { error: getTreeifyErrorMessage(validatedData) };
   }
 
   const result = await signIn(data);

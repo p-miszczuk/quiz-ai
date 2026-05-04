@@ -111,7 +111,7 @@ describe("createNewQuiz", () => {
       success: false,
       error: {
         type: "validation-error",
-        error: "Title and description are required",
+        error: "Title is required",
       },
     });
     expect(generateTextWithHuggingFace).not.toHaveBeenCalled();

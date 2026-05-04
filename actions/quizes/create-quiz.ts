@@ -8,7 +8,7 @@ export async function createNewQuiz(data: CreateNewQuizInputs) {
   const validatedData = createNewQuizSchema.safeParse(data);
 
   if (validatedData?.error) {
-    return { error: getTreeifyErrorMessage(validatedData.error) };
+    return { error: getTreeifyErrorMessage(validatedData) };
   }
 
   const result = await createQuiz(data);

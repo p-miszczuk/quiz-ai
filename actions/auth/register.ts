@@ -9,7 +9,7 @@ export async function register(data: RegisterInputs) {
   const validatedData = registerSchema.safeParse(data);
 
   if (validatedData?.error) {
-    return { error: getTreeifyErrorMessage(validatedData.error) };
+    return { error: getTreeifyErrorMessage(validatedData) };
   }
 
   const result = await createUser(data);

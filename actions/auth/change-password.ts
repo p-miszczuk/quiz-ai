@@ -8,7 +8,7 @@ export async function changePassword(data: ChangePasswordInputs) {
   const validatedData = changePasswordSchema.safeParse(data);
 
   if (validatedData?.error) {
-    return { error: getTreeifyErrorMessage(validatedData.error) };
+    return { error: getTreeifyErrorMessage(validatedData) };
   }
 
   const result = await setNewPassword({
