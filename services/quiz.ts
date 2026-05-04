@@ -12,7 +12,6 @@ import { UserId } from "@/types/user";
 import { CreateNewQuizInputs, type QuiziesSchema } from "@/validators/quiz";
 import { db } from "@/lib/db";
 import { ObjectId } from "mongodb";
-import { createQuizArray } from "./utils";
 import { generateTextWithHuggingFace } from "@/lib/hf";
 
 export const getUserQuizzes = async () => {
@@ -52,10 +51,17 @@ const createNewQuiz = async (data: CreateNewQuizInputs) => {
   const title = data.title.trim();
   const description = data.description.trim();
 
-  if (!title || !description) {
+  if (!title) {
     return errorResponse({
       type: "validation-error",
       error: "Title and description are required",
+    });
+  }
+
+  if (!description || description?.length < 20) {
+    return errorResponse({
+      type: "validation-error",
+      error: "Description must be at least 20 characters",
     });
   }
 
