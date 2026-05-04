@@ -5,19 +5,31 @@ jest.mock("@/services/quiz", () => ({
   createQuiz: jest.fn(),
 }));
 
+jest.mock("@/services/utils", () => ({
+  createQuizArray: jest.fn((raw: string) =>
+    JSON.parse(raw).map((item: Record<string, unknown>, i: number) => ({
+      ...item,
+      id: `test-id-${i}`,
+    })),
+  ),
+}));
+
 const mockReturnData = {
   success: true as const,
-  data: `{
-    question: "Which of the following NBA players did NOT play for the Chicago Bulls?",
-    options: [
-      "Michael Jordan",
-      "Scottie Pippen",
-      "Dennis Rodman",
-      "Kobe Bryant",
-    ],
-    answer: "Kobe Bryant",
-    field_type: "multiple_choice",
-  }`,
+  data: JSON.stringify([
+    {
+      question:
+        "Which of the following NBA players did NOT play for the Chicago Bulls?",
+      options: [
+        "Michael Jordan",
+        "Scottie Pippen",
+        "Dennis Rodman",
+        "Kobe Bryant",
+      ],
+      answer: "Kobe Bryant",
+      field_type: "multiple_choice",
+    },
+  ]),
 };
 
 describe("create new quiz", () => {
@@ -53,8 +65,14 @@ describe("create new quiz", () => {
       description: "description" + "x".repeat(20),
     });
 
-    expect(result).toEqual({
-      data: mockReturnData.data,
+    expect(result).toMatchObject({
+      data: [
+        expect.objectContaining({
+          answer: "Kobe Bryant",
+          field_type: "multiple_choice",
+          id: "test-id-0",
+        }),
+      ],
     });
   });
 });
