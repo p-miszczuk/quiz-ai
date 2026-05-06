@@ -15,7 +15,6 @@ export default function ChangePasswordForm() {
       <FormWrapper
         schema={changePasswordSchema}
         action={changePassword}
-        testId="change-password-form"
         title="Change Password"
         description="Enter your current password and new password to change your password"
       >

@@ -24,7 +24,6 @@ export interface FormWrapperProps<T extends FieldValues, R = unknown> {
   onSubmitStart?: () => void;
   onSubmitError?: () => void;
   title: string;
-  testId: string;
   redirectAfterSuccess?: string;
 }
 
@@ -37,7 +36,6 @@ export default function FormWrapper<T extends FieldValues, R = unknown>({
   onSubmitError,
   description,
   title,
-  testId = "form",
   redirectAfterSuccess,
 }: FormWrapperProps<T, R>) {
   const {
@@ -72,7 +70,7 @@ export default function FormWrapper<T extends FieldValues, R = unknown>({
         <form
           className="flex flex-col gap-4"
           onSubmit={handleSubmit(onSubmit)}
-          data-testid={testId}
+          aria-label={title}
         >
           {children({
             register: formRegister,

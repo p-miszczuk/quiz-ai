@@ -46,14 +46,14 @@ describe("register", () => {
   });
 
   it("should redirect to dashboard if user is created successfully", async () => {
-    (registerSchema.safeParse as jest.Mock).mockReturnValue({
+    vi.mocked(registerSchema.safeParse).mockReturnValue({
       success: true,
       data: mockData,
     } as never);
 
-    (createUser as jest.Mock).mockResolvedValue({
+    vi.mocked(createUser).mockResolvedValue({
       success: true,
-      data: { user: { id: "123" } },
+      data: { user: { id: "123" } } as any,
     });
 
     await register(mockData);
@@ -62,12 +62,12 @@ describe("register", () => {
   });
 
   it("should return error if user creation fails", async () => {
-    (registerSchema.safeParse as jest.Mock).mockReturnValue({
+    vi.mocked(registerSchema.safeParse).mockReturnValue({
       success: true,
       data: mockData,
     } as never);
 
-    (createUser as jest.Mock).mockResolvedValue({
+    vi.mocked(createUser).mockResolvedValue({
       success: false,
       error: { type: "better-auth-error", error: "User creation failed" },
     });

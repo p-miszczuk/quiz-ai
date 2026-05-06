@@ -15,7 +15,6 @@ export default function LoginForm({ isModal = false }: { isModal?: boolean }) {
       <FormWrapper
         schema={loginSchema}
         action={login}
-        testId="login-form"
         title="Login"
         description="Enter your email and password to login to your account"
       >

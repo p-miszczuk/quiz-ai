@@ -46,16 +46,18 @@ describe("LoginForm", () => {
 
   it("should render the login form", () => {
     render(<LoginForm isModal />);
-    expect(screen.getByTestId("login-form")).toBeInTheDocument();
+    expect(screen.getByRole("form", { name: "Login" })).toBeInTheDocument();
     expect(screen.getByLabelText("Email")).toBeInTheDocument();
     expect(screen.getByLabelText("Password")).toBeInTheDocument();
-    expect(screen.getByTestId("redirect-button")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Register" }),
+    ).toBeInTheDocument();
     expect(screen.getByText("Don't have an account?")).toBeInTheDocument();
   });
 
   it("should display error messages when form is submitted with empty fields", async () => {
     render(<LoginForm isModal />);
-    const loginForm = screen.getByTestId("login-form");
+    const loginForm = screen.getByRole("form", { name: "Login" });
     await act(async () => {
       fireEvent.submit(loginForm);
     });
@@ -65,7 +67,7 @@ describe("LoginForm", () => {
 
   it("should display error message if one of the fields is invalid", async () => {
     render(<LoginForm isModal />);
-    const loginForm = screen.getByTestId("login-form");
+    const loginForm = screen.getByRole("form", { name: "Login" });
     await fillInputs({ password: "" });
     await act(async () => {
       fireEvent.submit(loginForm);
@@ -80,7 +82,7 @@ describe("LoginForm", () => {
     } as never);
     render(<LoginForm isModal />);
 
-    const loginForm = screen.getByTestId("login-form");
+    const loginForm = screen.getByRole("form", { name: "Login" });
     await fillInputs({
       email: "invalid-email@test.com",
       password: "Password123!",

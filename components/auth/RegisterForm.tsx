@@ -20,7 +20,6 @@ export default function RegisterForm({
         <FormWrapper
           schema={registerSchema}
           action={register}
-          testId="register-form"
           title="Register"
           description="Enter your email and password to register to your account"
         >

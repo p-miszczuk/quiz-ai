@@ -41,8 +41,7 @@ export default function CreateNewQuizForm() {
           onSuccess={handleSuccess}
           onSubmitStart={handleSubmitStart}
           onSubmitError={handleSubmitError}
-          testId="create-new-quiz-form"
-          title="New Quiz"
+          title="Create New Quiz"
           description="Enter the details of the quiz you want to create"
         >
           {({ register, errors, isSubmitting: isCreating }) => (

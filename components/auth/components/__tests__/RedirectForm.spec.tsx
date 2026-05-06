@@ -24,7 +24,7 @@ describe("RedirectForm", () => {
       />,
     );
     expect(screen.getByText("Don't have an account?")).toBeInTheDocument();
-    expect(screen.getByTestId("redirect-link")).toBeInTheDocument();
+    expect(screen.getByRole("link")).toBeInTheDocument();
   });
 
   it("should render button when isModal is true", () => {
@@ -36,7 +36,7 @@ describe("RedirectForm", () => {
         text="Already have an account?"
       />,
     );
-    expect(screen.getByTestId("redirect-button")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Login" })).toBeInTheDocument();
     expect(screen.getByText("Login")).toBeInTheDocument();
   });
 
@@ -49,7 +49,7 @@ describe("RedirectForm", () => {
         text="Already have an account?"
       />,
     );
-    const redirectButton = screen.getByTestId("redirect-button");
+    const redirectButton = screen.getByRole("button", { name: "Login" });
     fireEvent.click(redirectButton);
     expect(mockReplace).toHaveBeenCalledWith("/login");
   });
@@ -63,7 +63,7 @@ describe("RedirectForm", () => {
         text="Don't have an account?"
       />,
     );
-    const redirectLink = screen.getByTestId("redirect-link");
+    const redirectLink = screen.getByRole("link");
     expect(redirectLink).toHaveAttribute("href", "/register");
     fireEvent.click(redirectLink);
     expect(mockReplace).not.toHaveBeenCalled();

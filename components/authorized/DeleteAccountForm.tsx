@@ -14,8 +14,7 @@ export default function DeleteAccountForm() {
       <FormWrapper
         schema={deleteUserSchema}
         action={deleteUserAccount}
-        testId="delete-account-form"
-        title="Remove Account"
+        title="Delete Account"
         description="Enter your password to remove your account"
         redirectAfterSuccess="/"
       >
@@ -35,7 +34,7 @@ export default function DeleteAccountForm() {
               </FieldError>
             )}
             <Button size="lg" type="submit" disabled={isSubmitting}>
-              Remove Account
+              Delete Account
             </Button>
           </>
         )}

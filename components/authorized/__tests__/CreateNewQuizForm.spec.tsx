@@ -29,7 +29,9 @@ describe("CreateNewQuizForm", () => {
 
   it("should render the form", () => {
     render(<CreateNewQuizForm />);
-    expect(screen.getByTestId("create-new-quiz-form")).toBeInTheDocument();
+    expect(
+      screen.getByRole("form", { name: "Create New Quiz" }),
+    ).toBeInTheDocument();
     expect(screen.getByTestId("quiz-title-input")).toBeInTheDocument();
     expect(screen.getByTestId("quiz-description-textarea")).toBeInTheDocument();
     expect(

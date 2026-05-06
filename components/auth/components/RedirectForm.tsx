@@ -32,7 +32,7 @@ export default function RedirectForm({
           onClick={handleRedirect}
           size="sm"
           className="text-blue-600 font-medium hover:underline cursor-pointer"
-          data-testid="redirect-button"
+          name="redirect-button"
         >
           {label}
         </Button>
@@ -40,7 +40,6 @@ export default function RedirectForm({
         <a
           href={`/${redirectPath}`}
           className="text-blue-600 font-medium hover:underline"
-          data-testid="redirect-link"
         >
           {label}
         </a>

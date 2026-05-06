@@ -58,12 +58,12 @@ describe("RegisterForm", () => {
 
   it("should render the register form", () => {
     render(<RegisterForm isModal={false} />);
-    expect(screen.getByTestId("register-form")).toBeInTheDocument();
+    expect(screen.getByRole("form", { name: "Register" })).toBeInTheDocument();
     expect(screen.getByTestId("email-input")).toBeInTheDocument();
     expect(screen.getByTestId("password-input")).toBeInTheDocument();
     expect(screen.getByTestId("confirm-password-input")).toBeInTheDocument();
     expect(screen.getByTestId("name-input")).toBeInTheDocument();
-    expect(screen.getByTestId("redirect-link")).toBeInTheDocument();
+    expect(screen.getByRole("link")).toBeInTheDocument();
     expect(screen.getByText("Already have an account?")).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Register" }),
@@ -72,7 +72,7 @@ describe("RegisterForm", () => {
 
   it("should display error messages when form is submitted with empty fields", async () => {
     render(<RegisterForm isModal={false} />);
-    const registerForm = screen.getByTestId("register-form");
+    const registerForm = screen.getByRole("form", { name: "Register" });
     await act(async () => {
       fireEvent.submit(registerForm);
     });
@@ -86,7 +86,7 @@ describe("RegisterForm", () => {
 
   it("should display error message if one of the fields is invalid", async () => {
     render(<RegisterForm isModal={false} />);
-    const registerForm = screen.getByTestId("register-form");
+    const registerForm = screen.getByRole("form", { name: "Register" });
     const { emailInput, passwordInput, confirmPasswordInput } =
       await fillInputs({ name: "" });
 
@@ -131,7 +131,7 @@ describe("RegisterForm", () => {
 
   it("user can submit the register form", async () => {
     render(<RegisterForm isModal={false} />);
-    const registerForm = screen.getByTestId("register-form");
+    const registerForm = screen.getByRole("form", { name: "Register" });
     await fillInputs({});
 
     await act(async () => {
@@ -153,7 +153,7 @@ describe("RegisterForm", () => {
     } as never);
 
     render(<RegisterForm isModal={false} />);
-    const registerForm = screen.getByTestId("register-form");
+    const registerForm = screen.getByRole("form", { name: "Register" });
     await fillInputs({});
 
     await act(async () => {

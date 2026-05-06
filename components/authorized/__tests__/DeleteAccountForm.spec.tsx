@@ -27,16 +27,18 @@ describe("DeleteAccountForm", () => {
 
   it("should render the form", () => {
     render(<DeleteAccountForm />);
-    expect(screen.getByTestId("delete-account-form")).toBeInTheDocument();
+    expect(
+      screen.getByRole("form", { name: "Delete Account" }),
+    ).toBeInTheDocument();
     expect(screen.getByLabelText("Current Password")).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Remove Account" }),
+      screen.getByRole("button", { name: "Delete Account" }),
     ).toBeInTheDocument();
   });
 
   it("should display error messages when form is submitted with empty password field", async () => {
     render(<DeleteAccountForm />);
-    fireEvent.submit(screen.getByTestId("delete-account-form"));
+    fireEvent.submit(screen.getByRole("form", { name: "Delete Account" }));
     expect(
       await screen.findByTestId("current-password-error"),
     ).toHaveTextContent(REMOVE_ACCOUNT_ERRORS.currentPassword);
@@ -51,7 +53,7 @@ describe("DeleteAccountForm", () => {
     fireEvent.change(screen.getByTestId("current-password-input"), {
       target: { value: "Test123!" },
     });
-    fireEvent.submit(screen.getByTestId("delete-account-form"));
+    fireEvent.submit(screen.getByRole("form", { name: "Delete Account" }));
 
     expect(
       await screen.findByTestId("delete-account-form-error"),

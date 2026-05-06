@@ -27,7 +27,9 @@ describe("ChangePasswordForm", () => {
 
   it("should render the change password form", () => {
     render(<ChangePasswordForm />);
-    expect(screen.getByTestId("change-password-form")).toBeInTheDocument();
+    expect(
+      screen.getByRole("form", { name: "Change Password" }),
+    ).toBeInTheDocument();
     expect(screen.getByTestId("current-password-input")).toBeInTheDocument();
     expect(screen.getByTestId("new-password-input")).toBeInTheDocument();
     expect(
@@ -41,7 +43,7 @@ describe("ChangePasswordForm", () => {
   it("should display error messages when form is submitted with empty fields", async () => {
     render(<ChangePasswordForm />);
 
-    fireEvent.submit(screen.getByTestId("change-password-form"));
+    fireEvent.submit(screen.getByRole("form", { name: "Change Password" }));
 
     await waitFor(() => {
       expect(
@@ -76,7 +78,7 @@ describe("ChangePasswordForm", () => {
     fireEvent.change(confirmNewPasswordInput, {
       target: { value: "Test123!" },
     });
-    fireEvent.submit(screen.getByTestId("change-password-form"));
+    fireEvent.submit(screen.getByRole("form", { name: "Change Password" }));
 
     await waitFor(() => {
       expect(screen.getByText("Password not changed")).toBeInTheDocument();
@@ -97,7 +99,7 @@ describe("ChangePasswordForm", () => {
     fireEvent.change(confirmNewPasswordInput, {
       target: { value: "Test123!" },
     });
-    fireEvent.submit(screen.getByTestId("change-password-form"));
+    fireEvent.submit(screen.getByRole("form", { name: "Change Password" }));
 
     await waitFor(() => {
       expect(
