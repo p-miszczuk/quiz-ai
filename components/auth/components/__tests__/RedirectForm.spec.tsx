@@ -1,9 +1,9 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import RedirectForm from "../RedirectForm";
 
-const mockReplace = jest.fn();
+const mockReplace = vi.fn();
 
-jest.mock("next/navigation", () => ({
+vi.mock("next/navigation", () => ({
   useRouter: () => ({
     replace: mockReplace,
   }),
@@ -11,7 +11,7 @@ jest.mock("next/navigation", () => ({
 
 describe("RedirectForm", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should render the redirect form", () => {

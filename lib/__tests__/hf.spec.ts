@@ -10,20 +10,20 @@ describe("hugging face fetch", () => {
       HUGGINGFACE_API_KEY: "1234567890",
       HUGGINGFACE_MODEL: "test-model",
     };
-    global.fetch = jest.fn();
+    global.fetch = vi.fn();
   });
 
   afterEach(() => {
     process.env = originalEnv;
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   it("should return the correct data", async () => {
     const messages = [{ role: "user" as const, content: "Some text" }];
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
+    vi.mocked(global.fetch).mockResolvedValueOnce({
       text: async () =>
         JSON.stringify({ choices: [{ message: { content: "Some text" } }] }),
-    });
+    } as unknown as Awaited<ReturnType<typeof fetch>>);
 
     const result = await generateTextWithHuggingFace(messages);
     expect(result).toEqual({ content: "Some text", error: null });
@@ -46,9 +46,9 @@ describe("hugging face fetch", () => {
   });
 
   it("should return an error if the fetch fails", async () => {
-    (global.fetch as jest.Mock).mockResolvedValue({
+    vi.mocked(global.fetch).mockResolvedValue({
       text: async () => "<!DOCTYPE html>",
-    });
+    } as unknown as Awaited<ReturnType<typeof fetch>>);
 
     const result = await generateTextWithHuggingFace([
       { role: "user", content: "x" },
@@ -59,7 +59,7 @@ describe("hugging face fetch", () => {
   });
 
   it("should returns error when fetch rejects", async () => {
-    (global.fetch as jest.Mock).mockRejectedValue(new Error("network down"));
+    vi.mocked(global.fetch).mockRejectedValue(new Error("network down"));
     const result = await generateTextWithHuggingFace([
       { role: "user", content: "x" },
     ]);

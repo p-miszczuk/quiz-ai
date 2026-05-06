@@ -4,22 +4,22 @@ import { signIn } from "@/services/auth";
 import { redirect } from "next/navigation";
 import { getTreeifyErrorMessage } from "@/lib/utils";
 
-jest.mock("@/services/auth", () => ({
-  signIn: jest.fn(),
+vi.mock("@/services/auth", () => ({
+  signIn: vi.fn(),
 }));
 
-jest.mock("@/validators/auth", () => ({
+vi.mock("@/validators/auth", () => ({
   loginSchema: {
-    safeParse: jest.fn(),
+    safeParse: vi.fn(),
   },
 }));
 
-jest.mock("next/navigation", () => ({
-  redirect: jest.fn(),
+vi.mock("next/navigation", () => ({
+  redirect: vi.fn(),
 }));
 
-jest.mock("@/lib/utils", () => ({
-  getTreeifyErrorMessage: jest.fn(),
+vi.mock("@/lib/utils", () => ({
+  getTreeifyErrorMessage: vi.fn(),
 }));
 
 const mockedData = {
@@ -29,18 +29,18 @@ const mockedData = {
 
 describe("login", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should return success when login is successful", async () => {
-    jest.mocked(loginSchema.safeParse).mockReturnValue({
+    vi.mocked(loginSchema.safeParse).mockReturnValue({
       success: true,
       data: {
         email: mockedData.email,
         password: mockedData.password,
       },
     });
-    jest.mocked(signIn).mockResolvedValue({ success: true } as any);
+    vi.mocked(signIn).mockResolvedValue({ success: true } as any);
 
     await login({
       email: "test@test.com",
@@ -51,14 +51,14 @@ describe("login", () => {
   });
 
   it("should return error when login fails", async () => {
-    jest.mocked(loginSchema.safeParse).mockReturnValue({
+    vi.mocked(loginSchema.safeParse).mockReturnValue({
       success: true,
       data: {
         email: mockedData.email,
         password: mockedData.password,
       },
     });
-    jest.mocked(signIn).mockResolvedValue({
+    vi.mocked(signIn).mockResolvedValue({
       success: false,
       error: { type: "better-auth-error", error: "Login failed" },
     } as any);
@@ -71,12 +71,12 @@ describe("login", () => {
   });
 
   it("should return error when schema validation fails", async () => {
-    jest.mocked(loginSchema.safeParse).mockReturnValue({
+    vi.mocked(loginSchema.safeParse).mockReturnValue({
       success: false,
       error: { message: "Invalid data" },
     } as any);
 
-    jest.mocked(getTreeifyErrorMessage).mockReturnValue("Validation failed");
+    vi.mocked(getTreeifyErrorMessage).mockReturnValue("Validation failed");
 
     const result = await login({
       email: mockedData.email,

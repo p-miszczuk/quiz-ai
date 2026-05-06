@@ -1,12 +1,12 @@
 import { createQuiz } from "@/services/quiz";
 import { createNewQuiz } from "../create-quiz";
 
-jest.mock("@/services/quiz", () => ({
-  createQuiz: jest.fn(),
+vi.mock("@/services/quiz", () => ({
+  createQuiz: vi.fn(),
 }));
 
-jest.mock("@/services/utils", () => ({
-  createQuizArray: jest.fn((raw: string) =>
+vi.mock("@/services/utils", () => ({
+  createQuizArray: vi.fn((raw: string) =>
     JSON.parse(raw).map((item: Record<string, unknown>, i: number) => ({
       ...item,
       id: `test-id-${i}`,
@@ -34,7 +34,7 @@ const mockReturnData = {
 
 describe("create new quiz", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("returns validation error when title is empty", async () => {
@@ -58,7 +58,7 @@ describe("create new quiz", () => {
   });
 
   it("returns success when quiz is created", async () => {
-    jest.mocked(createQuiz).mockResolvedValue(mockReturnData);
+    vi.mocked(createQuiz).mockResolvedValue(mockReturnData);
 
     const result = await createNewQuiz({
       title: "title",

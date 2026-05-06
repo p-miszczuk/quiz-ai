@@ -1,9 +1,9 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import UnauthenticatedNav from "../UnauthenticatedNav";
 
-const mockUsePathname = jest.fn();
-const mockPush = jest.fn();
-jest.mock("next/navigation", () => ({
+const mockUsePathname = vi.fn();
+const mockPush = vi.fn();
+vi.mock("next/navigation", () => ({
   usePathname: () => mockUsePathname(),
   useRouter: () => ({
     push: mockPush,
@@ -12,7 +12,7 @@ jest.mock("next/navigation", () => ({
 
 describe("UnauthenticatedNav", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockUsePathname.mockReturnValue("/");
   });
 

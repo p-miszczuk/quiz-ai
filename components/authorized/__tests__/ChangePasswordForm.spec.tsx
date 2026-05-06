@@ -3,19 +3,18 @@ import { CHANGE_PASSWORD_ERRORS, REGISTER_ERRORS } from "@/validators/auth";
 import { changePassword } from "@/actions/auth/change-password";
 import ChangePasswordForm from "../ChangePasswordForm";
 
-jest.mock("@/actions/auth/change-password", () => ({
-  changePassword: jest.fn(),
+vi.mock("@/actions/auth/change-password", () => ({
+  changePassword: vi.fn(),
 }));
 
-jest.mock("next/navigation", () => ({
+vi.mock("next/navigation", () => ({
   useRouter: () => ({
-    push: jest.fn(),
+    push: vi.fn(),
   }),
 }));
 
-jest.mock("@/validators/auth", () => {
-  const actual =
-    jest.requireActual<typeof import("@/validators/auth")>("@/validators/auth");
+vi.mock("@/validators/auth", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/validators/auth")>();
   return {
     ...actual,
   };
@@ -23,7 +22,7 @@ jest.mock("@/validators/auth", () => {
 
 describe("ChangePasswordForm", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should render the change password form", () => {
@@ -61,7 +60,7 @@ describe("ChangePasswordForm", () => {
   });
 
   it("should display error if password hasn't been changed", async () => {
-    jest.mocked(changePassword).mockResolvedValue({
+    vi.mocked(changePassword).mockResolvedValue({
       error: "Password not changed",
     } as any);
 
@@ -85,7 +84,7 @@ describe("ChangePasswordForm", () => {
   });
 
   it("should display success message when password is changed successfully", async () => {
-    jest.mocked(changePassword).mockResolvedValue({ success: true } as any);
+    vi.mocked(changePassword).mockResolvedValue({ success: true } as any);
     render(<ChangePasswordForm />);
     const currentPasswordInput = screen.getByTestId("current-password-input");
     const newPasswordInput = screen.getByTestId("new-password-input");

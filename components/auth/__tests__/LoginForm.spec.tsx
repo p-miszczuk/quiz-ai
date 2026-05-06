@@ -23,25 +23,25 @@ const fillInputs = async ({
   return { emailInput, passwordInput };
 };
 
-jest.mock("next/navigation", () => ({
+vi.mock("next/navigation", () => ({
   useRouter: () => ({
-    replace: jest.fn(),
+    replace: vi.fn(),
   }),
 }));
 
-jest.mock("next/navigation", () => ({
+vi.mock("next/navigation", () => ({
   useRouter: () => ({
-    push: jest.fn(),
+    push: vi.fn(),
   }),
 }));
 
-jest.mock("@/actions/auth/login", () => ({
-  login: jest.fn().mockResolvedValue({ error: null }),
+vi.mock("@/actions/auth/login", () => ({
+  login: vi.fn().mockResolvedValue({ error: null }),
 }));
 
 describe("LoginForm", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should render the login form", () => {
@@ -75,7 +75,7 @@ describe("LoginForm", () => {
 
   it("should display error message if the email is invalid", async () => {
     const errorMessage = "Invalid email or password";
-    jest.mocked(login).mockResolvedValueOnce({
+    vi.mocked(login).mockResolvedValueOnce({
       error: errorMessage,
     } as never);
     render(<LoginForm isModal />);

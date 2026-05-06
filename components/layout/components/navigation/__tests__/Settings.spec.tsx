@@ -1,20 +1,20 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import Dropdown from "../Settings";
 
-const mockPush = jest.fn();
-jest.mock("next/navigation", () => ({
+const mockPush = vi.fn();
+vi.mock("next/navigation", () => ({
   useRouter: () => ({
     push: mockPush,
   }),
 }));
 
-jest.mock("@/services/auth", () => ({
-  signOut: jest.fn().mockResolvedValue({ success: true }),
+vi.mock("@/services/auth", () => ({
+  signOut: vi.fn().mockResolvedValue({ success: true }),
 }));
 
 describe("Dropdown", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should render the Dropdown component", () => {

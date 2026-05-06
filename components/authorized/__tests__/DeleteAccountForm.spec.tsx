@@ -3,25 +3,28 @@ import { REMOVE_ACCOUNT_ERRORS } from "@/validators/auth";
 import { deleteUserAccount } from "@/actions/auth/delete";
 import DeleteAccountForm from "../DeleteAccountForm";
 
-jest.mock("@/actions/auth/delete", () => ({
-  deleteUserAccount: jest.fn(),
+vi.mock("@/actions/auth/delete", () => ({
+  deleteUserAccount: vi.fn(),
 }));
 
-jest.mock("next/navigation", () => ({
+vi.mock("next/navigation", () => ({
   useRouter: () => ({
-    push: jest.fn(),
+    push: vi.fn(),
   }),
 }));
 
-jest.mock("@/validators/auth", () => {
-  const actual =
-    jest.requireActual<typeof import("@/validators/auth")>("@/validators/auth");
+vi.mock("@/validators/auth", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/validators/auth")>();
   return {
     ...actual,
   };
 });
 
 describe("DeleteAccountForm", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it("should render the form", () => {
     render(<DeleteAccountForm />);
     expect(screen.getByTestId("delete-account-form")).toBeInTheDocument();
@@ -40,7 +43,7 @@ describe("DeleteAccountForm", () => {
   });
 
   it("should display error message if delete user account fails", async () => {
-    jest.mocked(deleteUserAccount).mockResolvedValue({
+    vi.mocked(deleteUserAccount).mockResolvedValue({
       error: "Delete user account failed",
     } as any);
 

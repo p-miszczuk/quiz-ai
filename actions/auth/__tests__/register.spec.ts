@@ -3,29 +3,28 @@ import { register } from "../register";
 import { createUser } from "@/services/auth";
 import { redirect } from "next/navigation";
 
-jest.mock("next/navigation", () => ({
-  redirect: jest.fn(),
+vi.mock("next/navigation", () => ({
+  redirect: vi.fn(),
 }));
 
-jest.mock("@/services/auth", () => ({
-  createUser: jest.fn(),
+vi.mock("@/services/auth", () => ({
+  createUser: vi.fn(),
 }));
 
-jest.mock("@/validators/auth", () => {
-  const actual =
-    jest.requireActual<typeof import("@/validators/auth")>("@/validators/auth");
+vi.mock("@/validators/auth", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/validators/auth")>();
   return {
     ...actual,
     registerSchema: {
-      safeParse: jest.fn(),
+      safeParse: vi.fn(),
     },
-    setTreeifyError: jest.fn(),
+    setTreeifyError: vi.fn(),
   };
 });
 
 describe("register", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   const mockData = {
@@ -37,7 +36,7 @@ describe("register", () => {
 
   it("should return validation error when schema validation fails", async () => {
     const mockError = { message: "Invalid data" };
-    jest.mocked(registerSchema.safeParse).mockReturnValue({
+    vi.mocked(registerSchema.safeParse).mockReturnValue({
       success: false,
       error: mockError,
     } as never);

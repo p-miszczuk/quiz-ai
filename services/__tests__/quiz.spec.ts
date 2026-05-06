@@ -4,26 +4,26 @@ import type { User } from "@/types/user";
 import { UserId } from "@/types/user";
 import { createQuiz, getUserQuizzes } from "../quiz";
 
-jest.mock("next/headers", () => ({
-  headers: jest.fn().mockResolvedValue(new Headers()),
+vi.mock("next/headers", () => ({
+  headers: vi.fn().mockResolvedValue(new Headers()),
 }));
 
-jest.mock("@/lib/auth", () => ({
-  getCurrentUser: jest.fn(),
+vi.mock("@/lib/auth", () => ({
+  getCurrentUser: vi.fn(),
 }));
 
-jest.mock("@/lib/db", () => ({
+vi.mock("@/lib/db", () => ({
   db: {
-    collection: jest.fn(() => ({ find })),
+    collection: vi.fn(() => ({ find })),
   },
   client: {},
 }));
 
-jest.mock("@/lib/hf", () => ({ generateTextWithHuggingFace: jest.fn() }));
+vi.mock("@/lib/hf", () => ({ generateTextWithHuggingFace: vi.fn() }));
 
-const toArray = jest.fn();
-const sort = jest.fn(() => ({ toArray }));
-const find = jest.fn(() => ({ sort }));
+const toArray = vi.fn();
+const sort = vi.fn(() => ({ toArray }));
+const find = vi.fn(() => ({ sort }));
 
 const mockUser: User = {
   id: "user-1" as UserId,
@@ -36,14 +36,14 @@ const mockUser: User = {
 
 describe("getUserQuizzes", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     toArray.mockReset();
     sort.mockReturnValue({ toArray });
     find.mockReturnValue({ sort });
   });
 
   it("return no-user error if user is not authenticated", async () => {
-    jest.mocked(getCurrentUser).mockResolvedValue(null);
+    vi.mocked(getCurrentUser).mockResolvedValue(null);
     const result = await getUserQuizzes();
     expect(result).toEqual({
       success: false,
@@ -55,7 +55,7 @@ describe("getUserQuizzes", () => {
   });
 
   it("returns quizzes if user is authenticated", async () => {
-    jest.mocked(getCurrentUser).mockResolvedValue(mockUser);
+    vi.mocked(getCurrentUser).mockResolvedValue(mockUser);
 
     const oid = { toString: () => "507f191e810c19729de860ea" };
     toArray.mockResolvedValue([
@@ -83,11 +83,11 @@ describe("getUserQuizzes", () => {
 
 describe("createNewQuiz", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("returns no-user where there is no session", async () => {
-    jest.mocked(getCurrentUser).mockResolvedValue(null);
+    vi.mocked(getCurrentUser).mockResolvedValue(null);
     const result = await createQuiz({
       title: "Test",
       description: "Test",
@@ -100,7 +100,7 @@ describe("createNewQuiz", () => {
   });
 
   it("returns validation error when title is empty", async () => {
-    jest.mocked(getCurrentUser).mockResolvedValue(mockUser);
+    vi.mocked(getCurrentUser).mockResolvedValue(mockUser);
 
     const result = await createQuiz({
       title: "",
@@ -118,7 +118,7 @@ describe("createNewQuiz", () => {
   });
 
   it("returns validation error when description is less than 20 characters", async () => {
-    jest.mocked(getCurrentUser).mockResolvedValue(mockUser);
+    vi.mocked(getCurrentUser).mockResolvedValue(mockUser);
 
     const result = await createQuiz({
       title: "Test",
@@ -135,8 +135,8 @@ describe("createNewQuiz", () => {
   });
 
   it("returns quiz-generation-error when Hugging Face fails", async () => {
-    jest.mocked(getCurrentUser).mockResolvedValue(mockUser);
-    jest.mocked(generateTextWithHuggingFace).mockResolvedValue({
+    vi.mocked(getCurrentUser).mockResolvedValue(mockUser);
+    vi.mocked(generateTextWithHuggingFace).mockResolvedValue({
       content: null,
       error: new Error("upstream"),
     });
@@ -155,9 +155,9 @@ describe("createNewQuiz", () => {
   });
 
   it("returns generated content on success", async () => {
-    jest.mocked(getCurrentUser).mockResolvedValue(mockUser);
+    vi.mocked(getCurrentUser).mockResolvedValue(mockUser);
     const raw = '[{"question":"1","answer":"a"}]';
-    jest.mocked(generateTextWithHuggingFace).mockResolvedValue({
+    vi.mocked(generateTextWithHuggingFace).mockResolvedValue({
       content: raw,
       error: null,
     });

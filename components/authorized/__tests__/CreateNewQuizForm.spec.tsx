@@ -2,13 +2,13 @@ import { createNewQuiz } from "@/actions/quizes/create-quiz";
 import CreateNewQuizForm from "../CreateNewQuizForm";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
-jest.mock("@/actions/quizes/create-quiz", () => ({
-  createNewQuiz: jest.fn(),
+vi.mock("@/actions/quizes/create-quiz", () => ({
+  createNewQuiz: vi.fn(),
 }));
 
-jest.mock("next/navigation", () => ({
+vi.mock("next/navigation", () => ({
   useRouter: () => ({
-    push: jest.fn(),
+    push: vi.fn(),
   }),
 }));
 
@@ -24,7 +24,7 @@ const mockQuiz = [
 
 describe("CreateNewQuizForm", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should render the form", () => {
@@ -52,7 +52,7 @@ describe("CreateNewQuizForm", () => {
   });
 
   it("should display success message when form is submitted with valid fields", async () => {
-    jest.mocked(createNewQuiz).mockResolvedValue({
+    vi.mocked(createNewQuiz).mockResolvedValue({
       data: mockQuiz,
     });
 
@@ -75,7 +75,7 @@ describe("CreateNewQuizForm", () => {
     });
     expect(createNewQuiz).toHaveBeenCalledWith({ title, description });
 
-    const firstReturn = jest.mocked(createNewQuiz).mock.results[0].value;
+    const firstReturn = vi.mocked(createNewQuiz).mock.results[0].value;
     await expect(firstReturn).resolves.toEqual({ data: mockQuiz });
     expect(
       screen.queryByTestId("create-new-quiz-form-error"),

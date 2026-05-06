@@ -3,22 +3,22 @@ import { REGISTER_ERRORS } from "@/validators/auth";
 import { register } from "@/actions/auth/register";
 import RegisterForm from "../RegisterForm";
 
-const mockPush = jest.fn();
-jest.mock("next/navigation", () => ({
+const mockPush = vi.fn();
+vi.mock("next/navigation", () => ({
   useRouter: () => ({
     push: mockPush,
-    replace: jest.fn(),
+    replace: vi.fn(),
   }),
 }));
 
-jest.mock("next/navigation", () => ({
+vi.mock("next/navigation", () => ({
   useRouter: () => ({
-    push: jest.fn(),
+    push: vi.fn(),
   }),
 }));
 
-jest.mock("@/actions/auth/register", () => ({
-  register: jest.fn().mockResolvedValue({ error: null }),
+vi.mock("@/actions/auth/register", () => ({
+  register: vi.fn().mockResolvedValue({ error: null }),
 }));
 
 interface FillInputs {
@@ -53,7 +53,7 @@ const fillInputs = async ({
 
 describe("RegisterForm", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should render the register form", () => {
@@ -148,7 +148,7 @@ describe("RegisterForm", () => {
 
   it("should display error message if the email is already in use", async () => {
     const errorMessage = "User already exists. Use another email.";
-    jest.mocked(register).mockResolvedValueOnce({
+    vi.mocked(register).mockResolvedValueOnce({
       error: errorMessage,
     } as never);
 

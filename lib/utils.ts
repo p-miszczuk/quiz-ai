@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { setTreeifyError } from "@/validators/auth";
-import { treeifyError, ZodError, ZodSafeParseResult } from "zod";
+import { ZodError, ZodSafeParseResult } from "zod";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

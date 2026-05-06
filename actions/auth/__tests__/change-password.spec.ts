@@ -3,33 +3,31 @@ import { changePassword } from "../change-password";
 import { changePasswordSchema } from "@/validators/auth";
 import { getTreeifyErrorMessage } from "@/lib/utils";
 
-jest.mock("@/services/auth", () => ({
-  setNewPassword: jest.fn(),
+vi.mock("@/services/auth", () => ({
+  setNewPassword: vi.fn(),
 }));
 
-jest.mock("@/lib/utils", () => {
-  const actual =
-    jest.requireActual<typeof import("@/lib/utils")>("@/lib/utils");
+vi.mock("@/lib/utils", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/utils")>();
   return {
     ...actual,
-    getTreeifyErrorMessage: jest.fn(),
+    getTreeifyErrorMessage: vi.fn(),
   };
 });
 
-jest.mock("@/validators/auth", () => {
-  const actual =
-    jest.requireActual<typeof import("@/validators/auth")>("@/validators/auth");
+vi.mock("@/validators/auth", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/validators/auth")>();
   return {
     ...actual,
     changePasswordSchema: {
-      safeParse: jest.fn(),
+      safeParse: vi.fn(),
     },
   };
 });
 
 describe("changePassword", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should return success when password is changed successfully", async () => {
@@ -37,7 +35,7 @@ describe("changePassword", () => {
     const newPassword = "Test123!";
     const confirmNewPassword = "Test123!";
 
-    jest.mocked(setNewPassword).mockResolvedValue({ success: true } as any);
+    vi.mocked(setNewPassword).mockResolvedValue({ success: true } as any);
 
     const result = await changePassword({
       currentPassword,
@@ -53,7 +51,7 @@ describe("changePassword", () => {
     const newPassword = "Test123!";
     const confirmNewPassword = "Test123!";
 
-    jest.mocked(setNewPassword).mockResolvedValue({
+    vi.mocked(setNewPassword).mockResolvedValue({
       success: false,
       error: { type: "better-auth-error", error: "Password not changed" },
     } as any);
@@ -68,12 +66,12 @@ describe("changePassword", () => {
   });
 
   it("should return error when schema validation fails", async () => {
-    jest.mocked(changePasswordSchema.safeParse).mockReturnValue({
+    vi.mocked(changePasswordSchema.safeParse).mockReturnValue({
       success: false,
       error: { message: "Invalid data" },
     } as any);
 
-    jest.mocked(getTreeifyErrorMessage).mockReturnValue("Validation failed");
+    vi.mocked(getTreeifyErrorMessage).mockReturnValue("Validation failed");
     const result = await changePassword({
       currentPassword: "Test123!",
       newPassword: "Test12!",

@@ -7,25 +7,25 @@ import {
   deleteUser,
 } from "../auth";
 
-jest.mock("next/headers", () => ({
-  headers: jest.fn().mockResolvedValue(new Headers()),
+vi.mock("next/headers", () => ({
+  headers: vi.fn().mockResolvedValue(new Headers()),
 }));
 
-jest.mock("@/lib/auth", () => ({
+vi.mock("@/lib/auth", () => ({
   auth: {
     api: {
-      signUpEmail: jest.fn(),
-      signInEmail: jest.fn(),
-      signOut: jest.fn(),
-      changePassword: jest.fn(),
-      deleteUser: jest.fn(),
+      signUpEmail: vi.fn(),
+      signInEmail: vi.fn(),
+      signOut: vi.fn(),
+      changePassword: vi.fn(),
+      deleteUser: vi.fn(),
     },
   },
 }));
 
 describe("createUser", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should return an error if all fields are not provided in sign up", async () => {
@@ -46,7 +46,7 @@ describe("createUser", () => {
   });
 
   it("should return success response if all fields are provided in sign up", async () => {
-    jest.mocked(auth.api.signUpEmail).mockResolvedValue({
+    vi.mocked(auth.api.signUpEmail).mockResolvedValue({
       user: { id: "123" },
     } as never);
 
@@ -68,7 +68,7 @@ describe("createUser", () => {
   });
 
   it("should return an error if the email is already in use", async () => {
-    jest.mocked(auth.api.signUpEmail).mockRejectedValue({
+    vi.mocked(auth.api.signUpEmail).mockRejectedValue({
       message: "User already exists. Use another email.",
     } as never);
 
@@ -89,7 +89,7 @@ describe("createUser", () => {
   });
 
   it("should return an error if an unknown error occurs after sign up", async () => {
-    jest.mocked(auth.api.signUpEmail).mockRejectedValue("unknown error");
+    vi.mocked(auth.api.signUpEmail).mockRejectedValue("unknown error");
 
     const result = await createUser({
       email: "test@test.com",
@@ -110,7 +110,7 @@ describe("createUser", () => {
 
 describe("signIn", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should return an error if all fields are not provided in sign in", async () => {
@@ -129,7 +129,7 @@ describe("signIn", () => {
   });
 
   it("should return success response if all fields are provided in sign in", async () => {
-    jest.mocked(auth.api.signInEmail).mockResolvedValue({
+    vi.mocked(auth.api.signInEmail).mockResolvedValue({
       user: { id: "123" },
     } as never);
 
@@ -147,7 +147,7 @@ describe("signIn", () => {
   });
 
   it("should return an error if the email is invalid", async () => {
-    jest.mocked(auth.api.signInEmail).mockRejectedValue({
+    vi.mocked(auth.api.signInEmail).mockRejectedValue({
       message: "Invalid email or password",
     } as never);
 
@@ -166,7 +166,7 @@ describe("signIn", () => {
   });
 
   it("should return an error if an unknown error occurs after sign in", async () => {
-    jest.mocked(auth.api.signInEmail).mockRejectedValue("unknown error");
+    vi.mocked(auth.api.signInEmail).mockRejectedValue("unknown error");
 
     const result = await signIn({
       email: "test@test.com",
@@ -185,11 +185,11 @@ describe("signIn", () => {
 
 describe("signOut", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should return an error if an unknown error occurs after sign out", async () => {
-    jest.mocked(auth.api.signOut).mockRejectedValue("unknown error");
+    vi.mocked(auth.api.signOut).mockRejectedValue("unknown error");
 
     const result = await signOut();
 
@@ -205,7 +205,7 @@ describe("signOut", () => {
 
 describe("setNewPassword", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should return an error if all fields are not provided in change password", async () => {
@@ -224,7 +224,7 @@ describe("setNewPassword", () => {
   });
 
   it("should return error if password hasn't been changed", async () => {
-    jest.mocked(auth.api.changePassword).mockRejectedValue({
+    vi.mocked(auth.api.changePassword).mockRejectedValue({
       message: "Password not changed",
     } as never);
 
@@ -240,7 +240,7 @@ describe("setNewPassword", () => {
   });
 
   it("should return success if password has been changed", async () => {
-    jest.mocked(auth.api.changePassword).mockResolvedValue({
+    vi.mocked(auth.api.changePassword).mockResolvedValue({
       success: true,
     } as never);
 
@@ -255,7 +255,7 @@ describe("setNewPassword", () => {
 
 describe("deleteUser", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should return an error if password filed is not provided in delete user", async () => {
@@ -273,7 +273,7 @@ describe("deleteUser", () => {
   });
 
   it("should return an error if an unknown error occurs after delete user", async () => {
-    jest.mocked(auth.api.deleteUser).mockRejectedValue("Delete user failed");
+    vi.mocked(auth.api.deleteUser).mockRejectedValue("Delete user failed");
 
     const result = await deleteUser({
       currentPassword: "Password123!",
@@ -289,7 +289,7 @@ describe("deleteUser", () => {
   });
 
   it("should return success if delete user succeeds", async () => {
-    jest.mocked(auth.api.deleteUser).mockResolvedValue({
+    vi.mocked(auth.api.deleteUser).mockResolvedValue({
       success: true,
     } as never);
 
