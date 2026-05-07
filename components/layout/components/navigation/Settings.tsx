@@ -30,6 +30,7 @@ export default function Settings() {
           className="w-6 h-6 cursor-pointer hover:text-gray-700"
           data-testid="settings-button"
           role="button"
+          aria-label="Settings Button"
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

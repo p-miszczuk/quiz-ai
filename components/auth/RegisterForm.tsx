@@ -30,7 +30,6 @@ export default function RegisterForm({
                 type="email"
                 placeholder="Enter your email"
                 label="Email"
-                data-testid="email-input"
                 errorMessage={errors?.email?.message}
                 {...register("email")}
               />
@@ -39,7 +38,6 @@ export default function RegisterForm({
                 type="password"
                 placeholder="Enter your password"
                 label="Password"
-                data-testid="password-input"
                 errorMessage={errors?.password?.message}
                 {...register("password")}
               />
@@ -48,7 +46,6 @@ export default function RegisterForm({
                 type="password"
                 placeholder="Confirm your password"
                 label="Confirm Password"
-                data-testid="confirm-password-input"
                 errorMessage={errors?.confirmPassword?.message}
                 {...register("confirmPassword")}
               />
@@ -57,7 +54,6 @@ export default function RegisterForm({
                 type="text"
                 placeholder="Enter your name"
                 label="Name"
-                data-testid="name-input"
                 errorMessage={errors?.name?.message}
                 {...register("name")}
               />

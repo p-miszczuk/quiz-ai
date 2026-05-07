@@ -31,13 +31,7 @@ export function InputField({
       <FieldLabel htmlFor={id} data-testid={`${id}-label`}>
         {label}
       </FieldLabel>
-      <Input
-        id={id}
-        type={type}
-        placeholder={placeholder}
-        {...props}
-        data-testid={`${id}-input`}
-      />
+      <Input id={id} type={type} placeholder={placeholder} {...props} />
       {description && (
         <FieldDescription data-testid={`${id}-description`}>
           {description}

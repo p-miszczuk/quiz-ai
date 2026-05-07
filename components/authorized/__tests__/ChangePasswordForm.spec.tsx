@@ -30,10 +30,10 @@ describe("ChangePasswordForm", () => {
     expect(
       screen.getByRole("form", { name: "Change Password" }),
     ).toBeInTheDocument();
-    expect(screen.getByTestId("current-password-input")).toBeInTheDocument();
-    expect(screen.getByTestId("new-password-input")).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Current Password$/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Password$/i)).toBeInTheDocument();
     expect(
-      screen.getByTestId("confirm-new-password-input"),
+      screen.getByLabelText(/^Confirm New Password$/i),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Change Password" }),
@@ -67,10 +67,10 @@ describe("ChangePasswordForm", () => {
     } as any);
 
     render(<ChangePasswordForm />);
-    const currentPasswordInput = screen.getByTestId("current-password-input");
-    const newPasswordInput = screen.getByTestId("new-password-input");
-    const confirmNewPasswordInput = screen.getByTestId(
-      "confirm-new-password-input",
+    const currentPasswordInput = screen.getByLabelText(/^Current Password$/i);
+    const newPasswordInput = screen.getByLabelText(/^Password$/i);
+    const confirmNewPasswordInput = screen.getByLabelText(
+      /^Confirm New Password$/i,
     );
 
     fireEvent.change(currentPasswordInput, { target: { value: "Test123!" } });
@@ -88,10 +88,10 @@ describe("ChangePasswordForm", () => {
   it("should display success message when password is changed successfully", async () => {
     vi.mocked(changePassword).mockResolvedValue({ success: true } as any);
     render(<ChangePasswordForm />);
-    const currentPasswordInput = screen.getByTestId("current-password-input");
-    const newPasswordInput = screen.getByTestId("new-password-input");
-    const confirmNewPasswordInput = screen.getByTestId(
-      "confirm-new-password-input",
+    const currentPasswordInput = screen.getByLabelText(/^Current Password$/i);
+    const newPasswordInput = screen.getByLabelText(/^Password$/i);
+    const confirmNewPasswordInput = screen.getByLabelText(
+      /^Confirm New Password$/i,
     );
 
     fireEvent.change(currentPasswordInput, { target: { value: "Test123!" } });

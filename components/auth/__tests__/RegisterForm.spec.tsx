@@ -34,10 +34,10 @@ const fillInputs = async ({
   confirmPassword = "Password123!",
   name = "John Doe",
 }: FillInputs) => {
-  const emailInput = screen.getByTestId("email-input");
-  const passwordInput = screen.getByTestId("password-input");
-  const confirmPasswordInput = screen.getByTestId("confirm-password-input");
-  const nameInput = screen.getByTestId("name-input");
+  const emailInput = screen.getByLabelText(/^Email$/i);
+  const passwordInput = screen.getByLabelText(/^Password$/i);
+  const confirmPasswordInput = screen.getByLabelText(/^Confirm Password$/i);
+  const nameInput = screen.getByLabelText(/^Name$/i);
 
   await act(async () => {
     fireEvent.change(emailInput, { target: { value: email } });
@@ -59,10 +59,10 @@ describe("RegisterForm", () => {
   it("should render the register form", () => {
     render(<RegisterForm isModal={false} />);
     expect(screen.getByRole("form", { name: "Register" })).toBeInTheDocument();
-    expect(screen.getByTestId("email-input")).toBeInTheDocument();
-    expect(screen.getByTestId("password-input")).toBeInTheDocument();
-    expect(screen.getByTestId("confirm-password-input")).toBeInTheDocument();
-    expect(screen.getByTestId("name-input")).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Email$/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Password$/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Confirm Password$/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Name$/i)).toBeInTheDocument();
     expect(screen.getByRole("link")).toBeInTheDocument();
     expect(screen.getByText("Already have an account?")).toBeInTheDocument();
     expect(

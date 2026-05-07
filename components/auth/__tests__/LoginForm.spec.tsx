@@ -12,8 +12,8 @@ const fillInputs = async ({
   email = "test@test.com",
   password = "Password123!",
 }: FillInputs) => {
-  const emailInput = screen.getByTestId("email-input");
-  const passwordInput = screen.getByTestId("password-input");
+  const emailInput = screen.getByLabelText(/^Email$/i);
+  const passwordInput = screen.getByLabelText(/^Password$/i);
 
   await act(async () => {
     fireEvent.change(emailInput, { target: { value: email } });

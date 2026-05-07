@@ -32,8 +32,8 @@ describe("CreateNewQuizForm", () => {
     expect(
       screen.getByRole("form", { name: "Create New Quiz" }),
     ).toBeInTheDocument();
-    expect(screen.getByTestId("quiz-title-input")).toBeInTheDocument();
-    expect(screen.getByTestId("quiz-description-textarea")).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Title$/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Description$/i)).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Create Quiz" }),
     ).toBeInTheDocument();
@@ -63,8 +63,8 @@ describe("CreateNewQuizForm", () => {
     const title = "Test Quiz";
     const description = "Test Description" + "x".repeat(20);
 
-    const titleInput = screen.getByTestId("quiz-title-input");
-    const descriptionTextarea = screen.getByTestId("quiz-description-textarea");
+    const titleInput = screen.getByLabelText(/^Title$/i);
+    const descriptionTextarea = screen.getByLabelText(/^Description$/i);
     fireEvent.change(titleInput, { target: { value: title } });
     fireEvent.change(descriptionTextarea, {
       target: { value: description },

@@ -30,7 +30,7 @@ describe("DeleteAccountForm", () => {
     expect(
       screen.getByRole("form", { name: "Delete Account" }),
     ).toBeInTheDocument();
-    expect(screen.getByLabelText("Current Password")).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Current Password$/i)).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Delete Account" }),
     ).toBeInTheDocument();
@@ -50,7 +50,7 @@ describe("DeleteAccountForm", () => {
     } as any);
 
     render(<DeleteAccountForm />);
-    fireEvent.change(screen.getByTestId("current-password-input"), {
+    fireEvent.change(screen.getByLabelText(/^Current Password$/i), {
       target: { value: "Test123!" },
     });
     fireEvent.submit(screen.getByRole("form", { name: "Delete Account" }));

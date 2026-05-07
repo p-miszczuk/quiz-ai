@@ -11,8 +11,7 @@ describe("InputField", () => {
         label="Email"
       />,
     );
-    expect(screen.getByTestId("email-label")).toBeInTheDocument();
-    expect(screen.getByTestId("email-input")).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Email$/i)).toBeInTheDocument();
   });
 
   it("should render the input field with a description", () => {
@@ -26,8 +25,9 @@ describe("InputField", () => {
         description={description}
       />,
     );
-    expect(screen.getByTestId("email-description")).toBeInTheDocument();
-    expect(screen.getByText(description)).toBeInTheDocument();
+    expect(screen.getByTestId("email-description")).toHaveTextContent(
+      description,
+    );
   });
 
   it("should render the input field with an error message", () => {
@@ -41,7 +41,6 @@ describe("InputField", () => {
         errorMessage={errorMessage}
       />,
     );
-    expect(screen.getByTestId("email-error")).toBeInTheDocument();
-    expect(screen.getByText(errorMessage)).toBeInTheDocument();
+    expect(screen.getByTestId("email-error")).toHaveTextContent(errorMessage);
   });
 });
