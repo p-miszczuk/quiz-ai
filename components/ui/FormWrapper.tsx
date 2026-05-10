@@ -20,7 +20,7 @@ export interface FormWrapperProps<T extends FieldValues, R = unknown> {
   action: (data: T) => Promise<{ error?: string; data?: R }>;
   children: (formHelpers: FormHelpers<T>) => React.ReactNode;
   description?: string;
-  onSuccess?: (data: R, title: string) => void;
+  onSuccess?: (data: R, title: string, description: string) => void;
   onSubmitStart?: () => void;
   onSubmitError?: () => void;
   title: string;

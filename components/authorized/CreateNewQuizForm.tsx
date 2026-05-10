@@ -5,11 +5,11 @@ import { InputField } from "../ui/fields/InputField";
 import { FieldError } from "../ui/shadcn/field";
 import { Button } from "../ui/shadcn/button";
 import { createNewQuiz } from "@/actions/quizes/create-quiz";
-import { createNewQuizSchema } from "@/validators/quiz";
+import { createNewQuizSchema, Quiz } from "@/validators/quiz";
 import { TextareaField } from "../ui/fields/TextareaField";
 import FormWrapper from "../ui/FormWrapper";
 import FormSuccessMessage from "../ui/FormSuccessMessage";
-import { QuizItem, useQuziStore } from "@/store/quizStore";
+import { useQuziStore } from "@/store/quizStore";
 import { useShallow } from "zustand/react/shallow";
 
 export default function CreateNewQuizForm() {
@@ -20,8 +20,12 @@ export default function CreateNewQuizForm() {
     })),
   );
 
-  const handleSuccess = (data: QuizItem[], title: string) => {
-    setGeneratedQuiz({ title, quiz: data });
+  const handleSuccess = (
+    data: Quiz["content"],
+    title: string,
+    description: string,
+  ) => {
+    setGeneratedQuiz({ title, description, content: data });
   };
 
   const handleSubmitStart = () => {

@@ -36,7 +36,11 @@ export function useFormWrapper<T extends FieldValues, R = unknown>({
     const { error, data: result } = await action(formData);
 
     if (!error && isDataInResponse(result) && onSuccess) {
-      onSuccess(result as R, String(formData?.title) || "");
+      onSuccess(
+        result as R,
+        String(formData?.title) || "",
+        String(formData?.description) || "",
+      );
       return;
     }
 

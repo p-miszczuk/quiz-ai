@@ -9,10 +9,12 @@ import {
   successResponse,
 } from "@/lib/query";
 import { UserId } from "@/types/user";
-import { CreateNewQuizInputs, type QuiziesSchema } from "@/validators/quiz";
+import { CreateNewQuizInputs, Quizies } from "@/validators/quiz";
 import { db } from "@/lib/db";
 import { ObjectId } from "mongodb";
 import { generateTextWithHuggingFace } from "@/lib/hf";
+
+export type CreateQuiz = Pick<Quizies, "title" | "description" | "content">;
 
 export const getUserQuizzes = async () => {
   return requireAuth(async (user) => {
@@ -22,20 +24,18 @@ export const getUserQuizzes = async () => {
 
 const findQuizzesByUserId = async (
   userId: UserId,
-): Promise<ServiceReturn<QuiziesSchema[], ServiceError>> => {
+): Promise<ServiceReturn<Quizies[], ServiceError>> => {
   return dbQuery(async () => {
     const quizzes = await db
-      .collection<QuiziesSchema & { _id: ObjectId }>("quizzes")
+      .collection<Quizies & { _id: ObjectId }>("quizzes")
       .find({ userId })
       .sort({ updatedAt: -1 })
       .toArray();
 
-    const quizzesWithId = quizzes.map(
-      (quiz: QuiziesSchema & { _id: ObjectId }) => ({
-        ...quiz,
-        _id: quiz._id.toString(),
-      }),
-    );
+    const quizzesWithId = quizzes.map((quiz: Quizies & { _id: ObjectId }) => ({
+      ...quiz,
+      _id: quiz._id.toString(),
+    }));
 
     return quizzesWithId;
   });
@@ -80,19 +80,29 @@ const createNewQuiz = async (data: CreateNewQuizInputs) => {
   }
 
   return successResponse(content);
+};
 
-  //   return dbQuery(async () => {
-  //     const now = new Date();
+export const saveQuiz = async (data: CreateQuiz) => {
+  return requireAuth(async (user) => {
+    return saveNewQuiz(user.id, data);
+  });
+};
 
-  //     const quiz: Omit<QuiziesSchema, "_id"> = {
-  //       name: title,
-  //       description,
-  //       content: quizContent || null,
-  //       createdAt: now,
-  //       updatedAt: now,
-  //       userId: userId,
-  //     };
+const saveNewQuiz = (userId: UserId, data: CreateQuiz) => {
+  const { description, title, content } = data || {};
 
-  //     return await db.collection("quizzes").insertOne(quiz);
-  //   });
+  return dbQuery(async () => {
+    const now = new Date();
+
+    const quiz: Omit<Quizies, "_id"> = {
+      title: title.trim(),
+      description: description.trim(),
+      content,
+      createdAt: now,
+      updatedAt: now,
+      userId: userId,
+    };
+
+    return await db.collection("quizzes").insertOne(quiz);
+  });
 };

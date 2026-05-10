@@ -7,9 +7,9 @@ import {
   TableRow,
 } from "@/components/ui/shadcn/table";
 import { Button } from "@/components/ui/shadcn/button";
-import { QuiziesSchema } from "@/validators/quiz";
+import { Quizies } from "@/validators/quiz";
 
-export default function QuzziesList({ quizzes }: { quizzes: QuiziesSchema[] }) {
+export default function QuzziesList({ quizzes }: { quizzes: Quizies[] }) {
   return (
     <Table>
       <TableHeader>

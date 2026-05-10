@@ -5,15 +5,21 @@ import QuizContent from "./components/QuizContent";
 import { Button } from "../ui/shadcn/button";
 import { Loader2 } from "lucide-react";
 import { useQuizTemplate } from "./hooks/useQuizTemplate";
+import Message from "../layout/messages/Message";
+import CloseButton from "../ui/CloseButton";
 
 export default function QuizTemplate() {
   const {
     title,
-    quiz,
+    content,
     showAnswers,
     handleShowAnswers,
+    handleSaveQuiz,
     isPending,
     isDataAvailable,
+    answerButtonText,
+    responseMessage,
+    removeMessage,
   } = useQuizTemplate();
 
   return (
@@ -26,12 +32,22 @@ export default function QuizTemplate() {
         <Card className="w-full">
           <CardHeader className="flex flex-row justify-between">
             <CardTitle className="text-2xl font-bold">{title}</CardTitle>
-            <Button onClick={handleShowAnswers}>
-              {showAnswers === "hidden" ? "Show Answers" : "Hide Answers"}
-            </Button>
+            <div className="flex flex-row gap-2">
+              <Button onClick={handleShowAnswers}>{answerButtonText}</Button>
+              <Button onClick={handleSaveQuiz}>Save Quiz</Button>
+            </div>
           </CardHeader>
+          {responseMessage && (
+            <div className="flex flex-row gap-2 px-3 items-center">
+              <Message
+                text={responseMessage.message}
+                type={responseMessage.type}
+              />
+              <CloseButton onClick={removeMessage} />
+            </div>
+          )}
           <CardContent className="w-full">
-            <QuizContent quiz={quiz} showAnswers={showAnswers} />
+            <QuizContent quiz={content} showAnswers={showAnswers} />
           </CardContent>
         </Card>
       )}
