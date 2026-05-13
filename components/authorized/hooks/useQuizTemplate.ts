@@ -8,13 +8,13 @@ type Message = Readonly<SaveNewQuizResponse>;
 export function useQuizTemplate() {
   const data = useQuziStore((s) => s.data);
   const isPending = useQuziStore((s) => s.isPending);
-  const { title, content, description } = data || {};
-  const isDataAvailable = !!data && !isPending;
 
   const [showAnswers, setShowAnswers] = useState<"hidden" | "visible">(
     "hidden",
   );
   const [responseMessage, setResponseMessage] = useState<Message | null>(null);
+  const { title, content, description } = data || {};
+  const isDataAvailable = !!data && !isPending;
 
   useEffect(() => {
     if (isPending) return;

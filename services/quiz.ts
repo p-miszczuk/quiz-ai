@@ -68,7 +68,7 @@ const createNewQuiz = async (data: CreateNewQuizInputs) => {
   const { content, error } = await generateTextWithHuggingFace([
     {
       role: "user",
-      content: `{"${description}"}. Insert the key with the right answer (called answer) - do not forget to add the key "answer" to the object and fill it with the right answer not the number of array!. Do not create objects in answer and do not create objects in possible answers (use key "options" to create the possible answers). Stick strictly to the topic. Return a JSON array, nothing else. Add the key "field_type" with the type of the question (multiple_choice, true_false, short_answer, long_answer)`,
+      content: `{"${description}"}. Insert the key with the right answer (called answer) - do not forget to add the key "answer" to the object and fill it with the right answer not the number of array!. Do not create objects in answer and do not create objects in possible answers (use key "options" to create the possible answers). Stick strictly to the topic. Return a JSON array, nothing else. Add the key "field_type" with the type of the question (multiple_choice, yes_no, short_answer, long_answer)`,
     },
   ]);
 

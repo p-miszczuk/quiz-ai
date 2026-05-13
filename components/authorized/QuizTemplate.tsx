@@ -25,7 +25,7 @@ export default function QuizTemplate() {
   return (
     <section className="flex items-start justify-start w-full">
       {isPending && (
-        <Loader2 className="w-4 h-4 animate-spin w-full flex justify-center" />
+        <Loader2 className="w-4 size-4 animate-spin w-full flex justify-center" />
       )}
       {/* TODO: add a skeleton loading */}
       {isDataAvailable && (
@@ -47,7 +47,7 @@ export default function QuizTemplate() {
             </div>
           )}
           <CardContent className="w-full">
-            <QuizContent quiz={content} showAnswers={showAnswers} />
+            <QuizContent content={content} showAnswers={showAnswers} />
           </CardContent>
         </Card>
       )}
