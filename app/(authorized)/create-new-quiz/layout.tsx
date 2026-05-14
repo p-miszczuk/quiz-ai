@@ -8,8 +8,8 @@ export default function CreateNewQuizLayout({
   return (
     <div className="flex flex-col w-full">
       <PageHeader
-        title="Create New Quiz"
-        description="Enter the details of the quiz you want to create"
+        title="Create Quiz"
+        description="Generate a new quiz with AI"
       />
       {children}
     </div>

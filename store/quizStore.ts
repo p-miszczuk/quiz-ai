@@ -13,6 +13,7 @@ interface QuziStore {
   resetGeneratedQuiz: () => void;
   setIsPending: (isPending: boolean) => void;
   updateQuiz: (data: any) => void;
+  deleteQuiz: (id: string) => void;
 }
 
 const applyItemUpdate = (
@@ -56,6 +57,13 @@ const updateQuizElement = (state: Quiz, payload: UpdateQuizPayload) => {
   };
 };
 
+const deleteQuizElement = (state: Quiz, id: string) => {
+  return {
+    ...state,
+    content: state.content.filter((item) => item.id !== id),
+  };
+};
+
 export const useQuziStore = create<QuziStore>((set, get) => ({
   data: null,
   isPending: false,
@@ -69,5 +77,13 @@ export const useQuziStore = create<QuziStore>((set, get) => ({
     const updateData = updateQuizElement(state, payload);
     if (!updateData) return;
     set({ data: updateData });
+  },
+  deleteQuiz: (id: string) => {
+    const state = get().data;
+    if (!state) return;
+
+    const deleteData = deleteQuizElement(state, id);
+    if (!deleteData) return;
+    set({ data: deleteData });
   },
 }));

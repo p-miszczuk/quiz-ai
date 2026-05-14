@@ -1,12 +1,14 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/shadcn/card";
-import QuizContent from "./components/QuizContent";
 import { Button } from "../ui/shadcn/button";
 import { Loader2 } from "lucide-react";
 import { useQuizTemplate } from "./hooks/useQuizTemplate";
 import Message from "../layout/messages/Message";
 import CloseButton from "../ui/CloseButton";
+import { Suspense, lazy } from "react";
+
+const QuizContent = lazy(() => import("./components/QuizContent"));
 
 export default function QuizTemplate() {
   const {
@@ -29,12 +31,16 @@ export default function QuizTemplate() {
       )}
       {/* TODO: add a skeleton loading */}
       {isDataAvailable && (
-        <Card className="w-full">
+        <Card className="w-full shadow-lg">
           <CardHeader className="flex flex-row justify-between">
             <CardTitle className="text-2xl font-bold">{title}</CardTitle>
             <div className="flex flex-row gap-2">
-              <Button onClick={handleShowAnswers}>{answerButtonText}</Button>
-              <Button onClick={handleSaveQuiz}>Save Quiz</Button>
+              <Button onClick={handleShowAnswers} className="shadow-md">
+                {answerButtonText}
+              </Button>
+              <Button onClick={handleSaveQuiz} className="shadow-md">
+                Save Quiz
+              </Button>
             </div>
           </CardHeader>
           {responseMessage && (
@@ -46,9 +52,17 @@ export default function QuizTemplate() {
               <CloseButton onClick={removeMessage} />
             </div>
           )}
-          <CardContent className="w-full">
-            <QuizContent content={content} showAnswers={showAnswers} />
-          </CardContent>
+          {!!content?.length && (
+            <CardContent className="w-full">
+              <Suspense
+                fallback={
+                  <Loader2 className="w-4 size-4 animate-spin w-full flex justify-center" />
+                }
+              >
+                <QuizContent content={content} showAnswers={showAnswers} />
+              </Suspense>
+            </CardContent>
+          )}
         </Card>
       )}
     </section>

@@ -8,6 +8,7 @@ type Message = Readonly<SaveNewQuizResponse>;
 export function useQuizTemplate() {
   const data = useQuziStore((s) => s.data);
   const isPending = useQuziStore((s) => s.isPending);
+  const resetGeneratedQuiz = useQuziStore((s) => s.resetGeneratedQuiz);
 
   const [showAnswers, setShowAnswers] = useState<"hidden" | "visible">(
     "hidden",
@@ -21,6 +22,12 @@ export function useQuizTemplate() {
     setResponseMessage(null);
     setShowAnswers("hidden");
   }, [isPending]);
+
+  useEffect(() => {
+    return () => {
+      resetGeneratedQuiz();
+    };
+  }, []);
 
   const handleShowAnswers = () => {
     setShowAnswers((prev) => (prev === "hidden" ? "visible" : "hidden"));

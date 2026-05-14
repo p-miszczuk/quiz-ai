@@ -1,7 +1,8 @@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/shadcn/radio-group";
 import { Field, FieldContent, FieldLabel } from "@/components/ui/shadcn/field";
-import { Activity, useState } from "react";
+import { Activity, Suspense, useState } from "react";
 import { Quiz } from "@/validators/quiz";
+import { Loader2, Trash2Icon } from "lucide-react";
 import EditIcon from "@/components/ui/EditIcon";
 import DialogComponent from "@/components/ui/dialog/Dialog";
 
@@ -16,12 +17,18 @@ interface GetTypeOfQuestionArgs {
   readonly id: string;
 }
 
+type Action = "text_edit" | "delete";
+
 export interface SelectedItem {
   id: string;
+  action: Action;
+}
+
+export type SelectedItemTextEdit = {
   type: "question" | "answer" | "option";
   optionIndex?: number;
   value: string;
-}
+} & SelectedItem;
 
 const dottedLine = (
   <p className="border-b border-gray-200 border-dashed w-full h-4" />
@@ -36,13 +43,19 @@ export default function QuizContent({
 }: QuizContentProps) {
   const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
 
-  const handleEdit = (data: SelectedItem) => () => {
+  const handleEdit = (data: SelectedItemTextEdit) => () => {
     setSelectedItem(data);
   };
 
   const handleCloseDialog = () => {
     setSelectedItem(null);
   };
+
+  const handleDelete =
+    ({ id, action }: SelectedItem) =>
+    () => {
+      setSelectedItem({ id, action });
+    };
 
   const getTypeOfQuestion = ({
     field_type,
@@ -58,8 +71,11 @@ export default function QuizContent({
             {options?.map((option, index) => {
               const optionId = option?.replaceAll(" ", "_");
               return (
-                <div className="group flex flex-row items-center gap-2">
-                  <Field orientation="horizontal" key={optionId}>
+                <div
+                  key={optionId}
+                  className="group flex flex-row items-center gap-2"
+                >
+                  <Field orientation="horizontal">
                     <RadioGroupItem value={option} id={optionId} />
                     <FieldContent>
                       <FieldLabel htmlFor={id} style={{ userSelect: "auto" }}>
@@ -75,6 +91,7 @@ export default function QuizContent({
                         type: "option",
                         optionIndex: index,
                         value: option,
+                        action: "text_edit",
                       })}
                     />
                   ) : null}
@@ -90,42 +107,68 @@ export default function QuizContent({
     }
   };
 
-  if (!content) return null;
+  if (!content?.length) return null;
+
+  const quizTitle =
+    selectedItem?.action === "text_edit"
+      ? "Update element"
+      : "Confirm deletion of element";
+
   return (
     <ul className="flex flex-col gap-4">
       {content?.map(({ id, question, options, field_type, answer }) => (
-        <li key={id} className="flex flex-col gap-2">
-          <div className="group flex flex-row items-center gap-2">
-            <p>{question}</p>
-            <EditIcon
-              additionalClasses={ADDITIONAL_CLASSES}
-              onClick={handleEdit({ id, type: "question", value: question })}
-            />
-          </div>
-          {getTypeOfQuestion({
-            field_type: field_type,
-            options,
-            id,
-          })}
-          <Activity mode={showAnswers}>
+        <li key={id} className="flex flex-row justify-between gap-2">
+          <div className="flex flex-col gap-2">
             <div className="group flex flex-row items-center gap-2">
-              <p className="font-bold">Answer: {answer}</p>
+              <p>{question}</p>
               <EditIcon
                 additionalClasses={ADDITIONAL_CLASSES}
-                onClick={handleEdit({ id, type: "answer", value: answer })}
+                onClick={handleEdit({ id, type: "question", value: question })}
               />
             </div>
-          </Activity>
+            {getTypeOfQuestion({
+              field_type: field_type,
+              options,
+              id,
+            })}
+            <Activity mode={showAnswers}>
+              <div className="group flex flex-row items-center gap-2">
+                <p className="font-bold">Answer: {answer}</p>
+                <EditIcon
+                  additionalClasses={ADDITIONAL_CLASSES}
+                  onClick={handleEdit({
+                    id,
+                    type: "answer",
+                    value: answer,
+                    action: "text_edit",
+                  })}
+                />
+              </div>
+            </Activity>
+          </div>
+          <div className="flex justify-center items-center w-10">
+            <Trash2Icon
+              className="w-4 h-4 cursor-pointer"
+              onClick={handleDelete({ id, action: "delete" })}
+            />
+          </div>
         </li>
       ))}
       {!!selectedItem && (
-        <DialogComponent
-          isDialogOpen
-          closeDialog={handleCloseDialog}
-          action="text_edit"
-          title="Update element"
-          data={selectedItem}
-        />
+        <div>
+          <Suspense
+            fallback={
+              <Loader2 className="w-4 size-4 animate-spin w-full flex justify-center" />
+            }
+          >
+            <DialogComponent
+              isDialogOpen
+              closeDialog={handleCloseDialog}
+              title={quizTitle}
+              data={selectedItem}
+            />
+          </Suspense>
+        </div>
       )}
     </ul>
   );
