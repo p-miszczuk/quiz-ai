@@ -16,28 +16,38 @@ import { generateTextWithHuggingFace } from "@/lib/hf";
 
 export type CreateQuiz = Pick<Quizies, "title" | "description" | "content">;
 
-export const getUserQuizzes = async () => {
+const TABLE_ROWS_LIMIT = 10;
+
+export const getUserQuizzes = async (skip: number = 0) => {
   return requireAuth(async (user) => {
-    return findQuizzesByUserId(user.id);
+    return findQuizzesByUserId(user.id, skip);
   });
 };
 
 const findQuizzesByUserId = async (
   userId: UserId,
-): Promise<ServiceReturn<Quizies[], ServiceError>> => {
+  skip: number,
+): Promise<
+  ServiceReturn<{ quizzes: Quizies[]; totalPages: number }, ServiceError>
+> => {
   return dbQuery(async () => {
     const quizzes = await db
       .collection<Quizies & { _id: ObjectId }>("quizzes")
       .find({ userId })
       .sort({ updatedAt: -1 })
+      .skip(skip * TABLE_ROWS_LIMIT)
+      .limit(TABLE_ROWS_LIMIT)
       .toArray();
+
+    const rowsCount = await db.collection("quizzes").countDocuments({ userId });
+    const totalPages = Math.ceil(rowsCount / TABLE_ROWS_LIMIT);
 
     const quizzesWithId = quizzes.map((quiz: Quizies & { _id: ObjectId }) => ({
       ...quiz,
       _id: quiz._id.toString(),
     }));
 
-    return quizzesWithId;
+    return { quizzes: quizzesWithId, totalPages };
   });
 };
 

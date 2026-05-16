@@ -14,7 +14,7 @@ vi.mock("@/lib/auth", () => ({
 
 vi.mock("@/lib/db", () => ({
   db: {
-    collection: vi.fn(() => ({ find })),
+    collection: vi.fn(() => ({ find, countDocuments })),
   },
   client: {},
 }));
@@ -22,8 +22,11 @@ vi.mock("@/lib/db", () => ({
 vi.mock("@/lib/hf", () => ({ generateTextWithHuggingFace: vi.fn() }));
 
 const toArray = vi.fn();
-const sort = vi.fn(() => ({ toArray }));
+const limit = vi.fn(() => ({ toArray }));
+const skip = vi.fn(() => ({ limit }));
+const sort = vi.fn(() => ({ skip }));
 const find = vi.fn(() => ({ sort }));
+const countDocuments = vi.fn();
 
 const mockUser: User = {
   id: "user-1" as UserId,
@@ -36,15 +39,16 @@ const mockUser: User = {
 
 describe("getUserQuizzes", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-    toArray.mockReset();
-    sort.mockReturnValue({ toArray });
+    sort.mockReturnValue({ skip });
+    skip.mockReturnValue({ limit });
+    limit.mockReturnValue({ toArray });
     find.mockReturnValue({ sort });
+    countDocuments.mockResolvedValue(1);
   });
 
   it("return no-user error if user is not authenticated", async () => {
     vi.mocked(getCurrentUser).mockResolvedValue(null);
-    const result = await getUserQuizzes();
+    const result = await getUserQuizzes(0);
     expect(result).toEqual({
       success: false,
       error: {
@@ -61,7 +65,7 @@ describe("getUserQuizzes", () => {
     toArray.mockResolvedValue([
       {
         _id: oid,
-        name: "Q1",
+        title: "Q1",
         description: "D1",
         content: null,
         createdAt: new Date("2024-01-01"),
@@ -69,15 +73,20 @@ describe("getUserQuizzes", () => {
         userId: mockUser.id,
       },
     ]);
-    const result = await getUserQuizzes();
+    countDocuments.mockResolvedValue(1);
+    const result = await getUserQuizzes(0);
 
     expect(result.success).toBe(true);
     if (!result.success) return;
-    expect(result.data).toHaveLength(1);
-    expect(result.data[0]._id).toBe("507f191e810c19729de860ea");
-    expect(result.data[0].name).toBe("Q1");
+    expect(result.data.quizzes).toHaveLength(1);
+    expect(result.data.totalPages).toBe(1);
+    expect(result.data.quizzes[0]._id).toBe("507f191e810c19729de860ea");
+    expect(result.data.quizzes[0]?.title).toBe("Q1");
     expect(find).toHaveBeenCalledWith({ userId: mockUser.id });
     expect(sort).toHaveBeenCalledWith({ updatedAt: -1 });
+    expect(skip).toHaveBeenCalledWith(0);
+    expect(limit).toHaveBeenCalledWith(10);
+    expect(countDocuments).toHaveBeenCalledWith({ userId: mockUser.id });
   });
 });
 
